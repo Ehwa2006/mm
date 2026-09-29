@@ -229,7 +229,26 @@
     return { rate: rate, limit: limit, excess: Math.max(0, actual - limit) };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, dormDeductionLimit: dormDeductionLimit, deductions: deductions, monthlyPay: monthlyPay,
+  /* Tabungan: (gaji bersih - biaya hidup - kiriman bulanan dipakai keluarga) × bulan + pesangon & pensiun perkiraan */
+  function savings(opts) {
+    var net = Math.max(0, +opts.monthlyNet || 0);
+    var living = Math.max(0, +opts.monthlyLiving || 0);
+    var months = Math.max(0, Math.floor(+opts.months || 0));
+    var gross = Math.max(0, +opts.monthlyGross || 0);
+    var monthly = Math.max(0, net - living);
+    var saved = monthly * months;
+    // Pesangon ≈ 1 bulan gaji per tahun (hanya jika ≥ 12 bulan); pensiun ≈ 9,5% gaji per bulan
+    var severance = months >= 12 ? Math.round(gross * months / 12) : 0;
+    var pension = Math.round(gross * 0.095 * months);
+    var total = saved + severance + pension;
+    var rate = Math.max(0, +opts.exchangeRate || 0);
+    return {
+      monthlySaving: monthly, saved: saved, severance: severance, pension: pension, total: total,
+      totalRupiah: rate ? Math.round(total * rate) : null
+    };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

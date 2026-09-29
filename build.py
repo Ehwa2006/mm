@@ -50,6 +50,12 @@ PAGES = [
      "Langkah melapor gaji, lembur, atau pesangon yang tidak dibayar di Korea, bunga 20%, dan bantuan pemerintah sampai ₩10 juta (간이대지급금)."),
     ("pekerja-setia", "Pekerja Setia", "Program Pekerja Setia E-9: Kembali ke Korea Setelah 1 Bulan (성실근로자 재입국)",
      "Syarat dan langkah program pekerja setia (성실근로자) untuk kembali bekerja di Korea tanpa EPS-TOPIK, total sampai 9 tahun 8 bulan."),
+    ("kalkulator-tabungan", "Tabungan", "Kalkulator Tabungan Kerja di Korea: Berapa Uang yang Dibawa Pulang?",
+     "Hitung perkiraan tabungan selama kerja di Korea 1 tahun, 3 tahun, atau 4 tahun 10 bulan, termasuk pesangon dan pengembalian pensiun, dalam Won dan Rupiah."),
+    ("nomor-penting", "Nomor Penting", "Nomor Telepon Penting untuk Pekerja Indonesia di Korea (Bahasa Indonesia)",
+     "Nomor darurat dan layanan bantuan di Korea yang melayani bahasa Indonesia: 1577-0071, 1345, serta 1350, 1355, dan nomor kecelakaan kerja."),
+    ("alur-eps", "Alur EPS", "Alur Kerja ke Korea Lewat EPS: EPS-TOPIK Sampai Mulai Bekerja",
+     "Tahapan program EPS G to G ke Korea: ujian EPS-TOPIK, tes keterampilan, job roster, kontrak, visa, pendidikan, dan hal yang perlu diurus setelah tiba."),
     ("tentang", "Tentang", f"Tentang {SITE_NAME}",
      f"Tentang {SITE_NAME}: kalkulator gratis dalam bahasa Indonesia untuk pekerja di Korea Selatan."),
     ("kebijakan-privasi", "Kebijakan Privasi", f"Kebijakan Privasi - {SITE_NAME}",
@@ -61,7 +67,7 @@ OUT = os.path.join(ROOT, "docs")
 
 
 # Halaman yang tampil di menu atas. Halaman lain ditautkan dari beranda.
-NAV = ("kalkulator-gaji", "pesangon", "pengembalian-pensiun", "tunjangan-pengangguran")
+NAV = ("kalkulator-gaji", "pesangon", "pengembalian-pensiun", "kalkulator-tabungan")
 
 
 def nav(current, depth):

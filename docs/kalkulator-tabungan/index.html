@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator Tabungan Kerja di Korea: Berapa Uang yang Dibawa Pulang?</title>
+<meta name="description" content="Hitung perkiraan tabungan selama kerja di Korea 1 tahun, 3 tahun, atau 4 tahun 10 bulan, termasuk pesangon dan pengembalian pensiun, dalam Won dan Rupiah.">
+<link rel="canonical" href="https://hitunggajikorea.com/kalkulator-tabungan/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kalkulator Tabungan Kerja di Korea: Berapa Uang yang Dibawa Pulang?">
+<meta property="og:description" content="Hitung perkiraan tabungan selama kerja di Korea 1 tahun, 3 tahun, atau 4 tahun 10 bulan, termasuk pesangon dan pengembalian pensiun, dalam Won dan Rupiah.">
+<meta property="og:url" content="https://hitunggajikorea.com/kalkulator-tabungan/">
+<meta property="og:site_name" content="Hitung Gaji Korea">
+<meta property="og:locale" content="id_ID">
+<link rel="stylesheet" href="../assets/style.css">
+<meta name="google-site-verification" content="6QZrg8arA0qcFsJjTlA1p7b6IiLDwgyLGydh9rirqkQ">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9801504493505676" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+  <a class="logo" href="../">Hitung Gaji Korea</a>
+  <nav>
+    <a href="../kalkulator-gaji/">Gaji Bersih</a>
+    <a href="../pesangon/">Pesangon</a>
+    <a href="../pengembalian-pensiun/">Pengembalian Pensiun</a>
+    <a href="../kalkulator-tabungan/" aria-current="page">Tabungan</a>
+    <a href="../">Semua</a>
+  </nav>
+</header>
+<main>
+<h1>Kalkulator Tabungan Kerja di Korea: Berapa yang Bisa Dibawa Pulang?</h1>
+<p class="lead">Perkirakan total uang yang bisa dikumpulkan selama bekerja di Korea: tabungan dari gaji, ditambah pesangon dan pengembalian pensiun saat pulang.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="gross">Gaji kotor per bulan (₩)</label><input id="gross" inputmode="numeric" data-money value="2.800.000"><div class="hint">Termasuk lembur rata-rata</div></div>
+  <div><label for="net">Gaji bersih per bulan (₩)</label><input id="net" inputmode="numeric" data-money value="2.450.000"><div class="hint">Hitung di <a href="../kalkulator-gaji/">kalkulator gaji</a></div></div>
+  <div><label for="living">Biaya hidup di Korea per bulan (₩)</label><input id="living" inputmode="numeric" data-money value="400.000"><div class="hint">Makan, pulsa, transportasi, dll.</div></div>
+  <div><label for="months">Lama bekerja (bulan)</label>
+    <select id="months"><option value="12">1 tahun</option><option value="36">3 tahun</option><option value="58" selected>4 tahun 10 bulan</option><option value="116">9 tahun 8 bulan</option></select></div>
+  <div><label for="rate">Kurs: 1 Won = berapa Rupiah</label><input id="rate" inputmode="decimal" value="11,5"></div>
+</form>
+<div class="card result">
+  <p>Perkiraan total uang yang dibawa pulang</p>
+  <p class="big" id="total">-</p>
+  <p id="totalRp"></p>
+  <table>
+    <tr><td>Bisa ditabung per bulan</td><td id="monthly"></td></tr>
+    <tr><td>Tabungan dari gaji</td><td id="saved"></td></tr>
+    <tr><td>Perkiraan pesangon</td><td id="sev"></td></tr>
+    <tr><td>Perkiraan pengembalian pensiun</td><td id="pen"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Cara menghitung</h2>
+<ul>
+  <li><strong>Tabungan dari gaji</strong> = (gaji bersih − biaya hidup) × jumlah bulan. Jika Anda mengirim uang ke keluarga untuk dipakai, masukkan juga ke biaya hidup.</li>
+  <li><strong>Pesangon</strong> ≈ gaji 1 bulan untuk setiap tahun kerja (hanya jika minimal 1 tahun). Detail di <a href="../pesangon/">kalkulator pesangon</a>.</li>
+  <li><strong>Pengembalian pensiun</strong> ≈ 9,5% gaji kotor setiap bulan (iuran pekerja + majikan), tanpa bunga. Detail di <a href="../pengembalian-pensiun/">kalkulator pensiun</a>.</li>
+</ul>
+<p>Pilihan 9 tahun 8 bulan berlaku jika Anda ikut <a href="../pekerja-setia/">program pekerja setia</a>. Semua angka adalah perkiraan kasar, dan kurs Won–Rupiah bisa naik turun.</p>
+<h2>Tips supaya tabungan lebih banyak</h2>
+<ul>
+  <li>Bandingkan biaya dan kurs beberapa layanan kirim uang sebelum transfer. Selisih kurs kecil bisa jadi jutaan Rupiah dalam beberapa tahun.</li>
+  <li>Cek slip gaji setiap bulan: lembur, uang libur mingguan, dan <a href="../potongan-asrama/">potongan asrama</a>.</li>
+  <li>Jangan lupa klaim semua asuransi saat pulang: <a href="../asuransi-khusus-eps/">4 asuransi khusus EPS</a>.</li>
+</ul>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.savings({ monthlyGross: num(gross), monthlyNet: num(net), monthlyLiving: num(living), months: +months.value, exchangeRate: num(rate) });
+    total.textContent = won(r.total);
+    totalRp.textContent = r.totalRupiah ? '≈ ' + rp(r.totalRupiah) : '';
+    monthly.textContent = won(r.monthlySaving);
+    saved.textContent = won(r.saved);
+    sev.textContent = won(r.severance);
+    pen.textContent = won(r.pension);
+  }
+  [gross, net, living, months, rate].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>
+
+</main>
+<footer>
+  <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Berdasarkan aturan Korea tahun 2026.</p>
+  <p><a href="../tentang/">Tentang</a> · <a href="../kebijakan-privasi/">Kebijakan Privasi</a> · &copy; 2026 Hitung Gaji Korea</p>
+</footer>
+<script src="../assets/calc.js"></script>
+<script src="../assets/ui.js"></script>
+</body>
+</html>

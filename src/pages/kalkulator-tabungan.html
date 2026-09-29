@@ -1,0 +1,50 @@
+<h1>Kalkulator Tabungan Kerja di Korea: Berapa yang Bisa Dibawa Pulang?</h1>
+<p class="lead">Perkirakan total uang yang bisa dikumpulkan selama bekerja di Korea: tabungan dari gaji, ditambah pesangon dan pengembalian pensiun saat pulang.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="gross">Gaji kotor per bulan (₩)</label><input id="gross" inputmode="numeric" data-money value="2.800.000"><div class="hint">Termasuk lembur rata-rata</div></div>
+  <div><label for="net">Gaji bersih per bulan (₩)</label><input id="net" inputmode="numeric" data-money value="2.450.000"><div class="hint">Hitung di <a href="{{prefix}}kalkulator-gaji/">kalkulator gaji</a></div></div>
+  <div><label for="living">Biaya hidup di Korea per bulan (₩)</label><input id="living" inputmode="numeric" data-money value="400.000"><div class="hint">Makan, pulsa, transportasi, dll.</div></div>
+  <div><label for="months">Lama bekerja (bulan)</label>
+    <select id="months"><option value="12">1 tahun</option><option value="36">3 tahun</option><option value="58" selected>4 tahun 10 bulan</option><option value="116">9 tahun 8 bulan</option></select></div>
+  <div><label for="rate">Kurs: 1 Won = berapa Rupiah</label><input id="rate" inputmode="decimal" value="11,5"></div>
+</form>
+<div class="card result">
+  <p>Perkiraan total uang yang dibawa pulang</p>
+  <p class="big" id="total">-</p>
+  <p id="totalRp"></p>
+  <table>
+    <tr><td>Bisa ditabung per bulan</td><td id="monthly"></td></tr>
+    <tr><td>Tabungan dari gaji</td><td id="saved"></td></tr>
+    <tr><td>Perkiraan pesangon</td><td id="sev"></td></tr>
+    <tr><td>Perkiraan pengembalian pensiun</td><td id="pen"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Cara menghitung</h2>
+<ul>
+  <li><strong>Tabungan dari gaji</strong> = (gaji bersih − biaya hidup) × jumlah bulan. Jika Anda mengirim uang ke keluarga untuk dipakai, masukkan juga ke biaya hidup.</li>
+  <li><strong>Pesangon</strong> ≈ gaji 1 bulan untuk setiap tahun kerja (hanya jika minimal 1 tahun). Detail di <a href="{{prefix}}pesangon/">kalkulator pesangon</a>.</li>
+  <li><strong>Pengembalian pensiun</strong> ≈ 9,5% gaji kotor setiap bulan (iuran pekerja + majikan), tanpa bunga. Detail di <a href="{{prefix}}pengembalian-pensiun/">kalkulator pensiun</a>.</li>
+</ul>
+<p>Pilihan 9 tahun 8 bulan berlaku jika Anda ikut <a href="{{prefix}}pekerja-setia/">program pekerja setia</a>. Semua angka adalah perkiraan kasar, dan kurs Won–Rupiah bisa naik turun.</p>
+<h2>Tips supaya tabungan lebih banyak</h2>
+<ul>
+  <li>Bandingkan biaya dan kurs beberapa layanan kirim uang sebelum transfer. Selisih kurs kecil bisa jadi jutaan Rupiah dalam beberapa tahun.</li>
+  <li>Cek slip gaji setiap bulan: lembur, uang libur mingguan, dan <a href="{{prefix}}potongan-asrama/">potongan asrama</a>.</li>
+  <li>Jangan lupa klaim semua asuransi saat pulang: <a href="{{prefix}}asuransi-khusus-eps/">4 asuransi khusus EPS</a>.</li>
+</ul>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.savings({ monthlyGross: num(gross), monthlyNet: num(net), monthlyLiving: num(living), months: +months.value, exchangeRate: num(rate) });
+    total.textContent = won(r.total);
+    totalRp.textContent = r.totalRupiah ? '≈ ' + rp(r.totalRupiah) : '';
+    monthly.textContent = won(r.monthlySaving);
+    saved.textContent = won(r.saved);
+    sev.textContent = won(r.severance);
+    pen.textContent = won(r.pension);
+  }
+  [gross, net, living, months, rate].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

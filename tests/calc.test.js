@@ -97,3 +97,14 @@ test('batas potongan asrama: rumah 20%/15%, sementara 13%/8%, kelebihan', () => 
   assert.strictEqual(r.limit, 160000);
   assert.strictEqual(r.excess, 90000);
 });
+
+test('tabungan: sisa bulanan × bulan + pesangon + pensiun', () => {
+  const r = C.savings({ monthlyNet: 2500000, monthlyLiving: 500000, months: 36, monthlyGross: 3000000, exchangeRate: 11.5 });
+  assert.strictEqual(r.monthlySaving, 2000000);
+  assert.strictEqual(r.saved, 72000000);
+  assert.strictEqual(r.severance, 9000000);
+  assert.strictEqual(r.pension, Math.round(3000000 * 0.095 * 36));
+  assert.strictEqual(r.total, r.saved + r.severance + r.pension);
+  assert.strictEqual(r.totalRupiah, Math.round(r.total * 11.5));
+  assert.strictEqual(C.savings({ monthlyNet: 2500000, months: 11, monthlyGross: 3000000 }).severance, 0);
+});
