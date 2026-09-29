@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Batas Potongan Asrama dan Makan Pekerja Asing di Korea (숙식비 공제) - Kalkulator</title>
+<meta name="description" content="Majikan hanya boleh memotong biaya asrama dan makan 8–20% dari upah normal. Cek apakah potongan di slip gaji Anda melebihi batas.">
+<link rel="canonical" href="https://hitunggajikorea.com/potongan-asrama/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Batas Potongan Asrama dan Makan Pekerja Asing di Korea (숙식비 공제) - Kalkulator">
+<meta property="og:description" content="Majikan hanya boleh memotong biaya asrama dan makan 8–20% dari upah normal. Cek apakah potongan di slip gaji Anda melebihi batas.">
+<meta property="og:url" content="https://hitunggajikorea.com/potongan-asrama/">
+<meta property="og:site_name" content="Hitung Gaji Korea">
+<meta property="og:locale" content="id_ID">
+<link rel="stylesheet" href="../assets/style.css">
+<meta name="google-site-verification" content="6QZrg8arA0qcFsJjTlA1p7b6IiLDwgyLGydh9rirqkQ">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9801504493505676" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+  <a class="logo" href="../">Hitung Gaji Korea</a>
+  <nav>
+    <a href="../kalkulator-gaji/">Gaji Bersih</a>
+    <a href="../pesangon/">Pesangon</a>
+    <a href="../pengembalian-pensiun/">Pengembalian Pensiun</a>
+    <a href="../tunjangan-pengangguran/">Tunjangan Pengangguran</a>
+    <a href="../">Semua</a>
+  </nav>
+</header>
+<main>
+<h1>Kalkulator Batas Potongan Asrama dan Makan (숙식비 공제)</h1>
+<p class="lead">Majikan boleh memotong biaya asrama dan makan dari gaji, tetapi ada batas maksimalnya. Cek apakah potongan di slip gaji Anda melebihi batas.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="wage">Upah normal per bulan (통상임금, ₩)</label><input id="wage" inputmode="numeric" data-money value="2.156.880"><div class="hint">Gaji pokok tanpa lembur. Upah minimum: ₩2.156.880</div></div>
+  <div><label for="housing">Jenis tempat tinggal</label>
+    <select id="housing"><option value="house">Apartemen, rumah, vila (주택)</option><option value="temporary">Kontainer, panel, rumah kaca, di dalam pabrik (임시 주거시설)</option></select></div>
+  <div><label for="meals">Makan disediakan?</label>
+    <select id="meals"><option value="1">Ya, asrama + makan</option><option value="0">Tidak, asrama saja</option></select></div>
+  <div><label for="actual">Potongan di slip gaji Anda (₩)</label><input id="actual" inputmode="numeric" data-money value="300.000"></div>
+</form>
+<div class="card result">
+  <p>Potongan maksimal yang diizinkan</p>
+  <p class="big" id="limit">-</p>
+  <p id="rate"></p>
+  <p id="msg"></p>
+</div>
+<div class="ad-slot"></div>
+<h2>Tabel batas potongan</h2>
+<table class="card">
+  <tr><td><strong>Jenis tempat tinggal</strong></td><td><strong>Asrama + makan / Asrama saja</strong></td></tr>
+  <tr><td>Apartemen, rumah, vila, atau sejenisnya</td><td>20% / 15%</td></tr>
+  <tr><td>Tempat tinggal sementara (kontainer, panel, rumah kaca, dll.)</td><td>13% / 8%</td></tr>
+</table>
+<p>Persentase dihitung dari upah normal bulanan (통상임금), bukan dari gaji total dengan lembur. Jika hanya makan yang disediakan, potongannya harus sesuai biaya makan yang sebenarnya.</p>
+<h2>Syarat agar potongan sah</h2>
+<ul>
+  <li>Majikan harus menjelaskan kondisi tempat tinggal dan biayanya sebelum kontrak.</li>
+  <li>Pekerja harus menandatangani <strong>persetujuan tertulis</strong> (숙식비 공제 동의서) dalam bahasa yang dimengerti.</li>
+  <li>Jumlah potongan harus tertulis jelas. Potongan yang tidak pernah disetujui tidak sah.</li>
+  <li>Tempat tinggal harus memenuhi standar minimum, misalnya ada kamar mandi, pemanas, alat pemadam kebakaran, dan pintu yang bisa dikunci.</li>
+</ul>
+<h2>Jika potongan melebihi batas</h2>
+<p>Kelebihan potongan termasuk upah yang tidak dibayar. Minta penjelasan ke majikan terlebih dahulu. Jika tidak ada penyelesaian, lihat <a href="../gaji-tidak-dibayar/">cara melaporkan gaji yang tidak dibayar</a>, atau konsultasi dalam bahasa Indonesia di Pusat Konsultasi Pekerja Asing 1577-0071.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.dormDeductionLimit({ ordinaryWage: num(wage), housing: housing.value, meals: meals.value === '1', actualDeduction: num(actual) });
+    limit.textContent = won(r.limit);
+    rate.textContent = Math.round(r.rate * 100) + '% dari upah normal bulanan';
+    msg.innerHTML = r.excess > 0 ? '<span class="warn">Potongan Anda melebihi batas sebesar ' + won(r.excess) + '.</span>' : (num(actual) ? 'Potongan Anda masih dalam batas.' : '');
+  }
+  [wage, housing, meals, actual].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>
+
+</main>
+<footer>
+  <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Berdasarkan aturan Korea tahun 2026.</p>
+  <p><a href="../tentang/">Tentang</a> · <a href="../kebijakan-privasi/">Kebijakan Privasi</a> · &copy; 2026 Hitung Gaji Korea</p>
+</footer>
+<script src="../assets/calc.js"></script>
+<script src="../assets/ui.js"></script>
+</body>
+</html>

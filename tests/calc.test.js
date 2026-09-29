@@ -87,3 +87,13 @@ test('gaji: tanpa asuransi pengangguran tidak ada potongan 고용보험', () => 
   assert.strictEqual(C.monthlyPay({ hourly: 10320, noEmploymentInsurance: true }).deductions.employment, 0);
   assert.ok(C.monthlyPay({ hourly: 10320 }).deductions.employment > 0);
 });
+
+test('batas potongan asrama: rumah 20%/15%, sementara 13%/8%, kelebihan', () => {
+  const w = 2156880;
+  assert.strictEqual(C.dormDeductionLimit({ ordinaryWage: w, housing: 'house', meals: true }).limit, Math.floor(w * 0.20));
+  assert.strictEqual(C.dormDeductionLimit({ ordinaryWage: w, housing: 'house', meals: false }).limit, Math.floor(w * 0.15));
+  assert.strictEqual(C.dormDeductionLimit({ ordinaryWage: w, housing: 'temporary', meals: true }).limit, Math.floor(w * 0.13));
+  const r = C.dormDeductionLimit({ ordinaryWage: 2000000, housing: 'temporary', meals: false, actualDeduction: 250000 });
+  assert.strictEqual(r.limit, 160000);
+  assert.strictEqual(r.excess, 90000);
+});

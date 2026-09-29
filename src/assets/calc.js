@@ -218,7 +218,18 @@
     };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, deductions: deductions, monthlyPay: monthlyPay,
+  /* Batas potongan asrama/makan (숙식비 공제지침): % dari upah normal bulanan (통상임금) */
+  var DORM_LIMITS = { house: { meals: 0.20, none: 0.15 }, temporary: { meals: 0.13, none: 0.08 } };
+
+  function dormDeductionLimit(opts) {
+    var wage = Math.max(0, +opts.ordinaryWage || 0);
+    var rate = DORM_LIMITS[opts.housing === 'temporary' ? 'temporary' : 'house'][opts.meals ? 'meals' : 'none'];
+    var limit = Math.floor(wage * rate);
+    var actual = Math.max(0, +opts.actualDeduction || 0);
+    return { rate: rate, limit: limit, excess: Math.max(0, actual - limit) };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, dormDeductionLimit: dormDeductionLimit, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
