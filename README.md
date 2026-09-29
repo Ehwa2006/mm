@@ -19,6 +19,14 @@
 - 저축액 계산기 (`/kalkulator-tabungan/`)
 - 인도네시아어 상담 가능 전화번호 (`/nomor-penting/`)
 - EPS-TOPIK부터 입국·취업까지 절차 (`/alur-eps/`)
+- 임금명세서 읽는 법·월별 체크리스트 (`/slip-gaji/`)
+- 사이트 소개(`/tentang/`), 연락처(`/kontak/`), 이용약관·면책(`/syarat-ketentuan/`), 개인정보처리방침(`/kebijakan-privasi/`)
+
+모든 페이지에 자동으로 들어가는 것 (`build.py`):
+- 페이지별 "최종 수정일" (소스 파일의 마지막 커밋 날짜) 과 공식 출처 목록(`SOURCES`)
+- 경로 표시(breadcrumb), 같은 분류의 관련 페이지 4개, 전체 페이지 링크가 있는 푸터
+- 구조화 데이터: WebSite / BreadcrumbList / WebPage, "Pertanyaan umum" 섹션이 있으면 FAQPage
+- 파비콘, 공유 미리보기 이미지(og.png), 404 페이지(noindex)
 - 사이트 소개·연락처 (`/tentang/`)
 
 서버 없이 동작하는 정적 사이트라서 호스팅 비용이 없어요. 계산은 모두 브라우저에서 이루어져요.
