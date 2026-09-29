@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ehwa2006.github.io/mm/sitemap.xml

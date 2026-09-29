@@ -1,0 +1,8 @@
+{
+  "name": "wolgeup-calc",
+  "private": true,
+  "scripts": {
+    "build": "python3 build.py",
+    "test": "node --test"
+  }
+}
