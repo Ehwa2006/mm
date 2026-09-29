@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator Pengembalian Pensiun Korea (반환일시금) untuk TKI</title>
+<meta name="description" content="Perkirakan uang pensiun nasional Korea (국민연금) yang bisa diklaim kembali saat pulang ke Indonesia, termasuk iuran majikan dan bunga.">
+<link rel="canonical" href="https://ehwa2006.github.io/mm/pengembalian-pensiun/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kalkulator Pengembalian Pensiun Korea (반환일시금) untuk TKI">
+<meta property="og:description" content="Perkirakan uang pensiun nasional Korea (국민연금) yang bisa diklaim kembali saat pulang ke Indonesia, termasuk iuran majikan dan bunga.">
+<meta property="og:url" content="https://ehwa2006.github.io/mm/pengembalian-pensiun/">
+<meta property="og:site_name" content="Hitung Gaji Korea">
+<meta property="og:locale" content="id_ID">
+<link rel="stylesheet" href="../assets/style.css">
+
+</head>
+<body>
+<header>
+  <a class="logo" href="../">Hitung Gaji Korea</a>
+  <nav>
+    <a href="../kalkulator-gaji/">Gaji Bersih</a>
+    <a href="../pesangon/">Pesangon</a>
+    <a href="../pengembalian-pensiun/" aria-current="page">Pengembalian Pensiun</a>
+  </nav>
+</header>
+<main>
+<h1>Kalkulator Pengembalian Pensiun Korea (반환일시금)</h1>
+<p class="lead">Pekerja visa E-9 bisa mengambil kembali iuran pensiun nasional Korea (국민연금), termasuk bagian majikan dan bunganya, saat pulang ke Indonesia.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="wage">Gaji kotor rata-rata per bulan (₩)</label><input id="wage" inputmode="numeric" data-money value="2.800.000"></div>
+  <div><label for="from">Bulan mulai kerja</label><input id="from" type="month" value="2023-05"></div>
+  <div><label for="to">Bulan terakhir kerja</label><input id="to" type="month" value="2026-04"></div>
+  <div><label for="rate">Kurs: 1 Won = berapa Rupiah</label><input id="rate" inputmode="decimal" value="11,5"></div>
+</form>
+<div class="card result">
+  <p>Perkiraan uang pensiun yang kembali</p>
+  <p class="big" id="total">-</p>
+  <p id="totalRp"></p>
+  <table>
+    <tr><td>Jumlah bulan iuran</td><td id="months"></td></tr>
+    <tr><td>Iuran pekerja + majikan</td><td id="contrib"></td></tr>
+    <tr><td>Perkiraan bunga</td><td id="interest"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Siapa yang bisa klaim?</h2>
+<p>Pemegang visa E-9 (EPS), E-8, dan H-2 bisa menerima pengembalian sekaligus (반환일시금) saat meninggalkan Korea. Uang yang kembali adalah iuran Anda sendiri, iuran majikan, dan bunga sesuai suku bunga deposito 3 tahun. Kalkulator ini memakai perkiraan bunga 3% per tahun, jadi angka resminya bisa berbeda.</p>
+<h2>Cara klaim</h2>
+<ol>
+  <li>Sebelum pulang, datang ke kantor National Pension Service (국민연금공단) terdekat, atau telepon 1355 (ada layanan bahasa asing).</li>
+  <li>Bawa paspor, kartu registrasi orang asing (ARC), tiket pesawat, dan buku rekening bank.</li>
+  <li>Uang dikirim ke rekening Korea atau Indonesia setelah Anda keluar dari Korea. Ada juga layanan di Bandara Incheon Terminal 1.</li>
+</ol>
+<h2>Kenapa iuran naik tahun 2026?</h2>
+<p>Reformasi pensiun Korea menaikkan iuran total dari 9% menjadi 9,5% mulai 2026, dan naik 0,5% setiap tahun sampai 13%. Karena iuran majikan ikut dikembalikan, uang pensiun yang bisa diklaim juga makin besar.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    if (!from.value || !to.value) return;
+    var r = Calc.pensionRefund({ monthlyWage: num(wage), startMonth: from.value, endMonth: to.value });
+    total.textContent = won(r.total);
+    totalRp.textContent = num(rate) ? '≈ ' + rp(r.total * num(rate)) : '';
+    months.textContent = r.months + ' bulan';
+    contrib.textContent = won(r.contributions);
+    interest.textContent = won(r.interest);
+  }
+  [wage, from, to, rate].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>
+
+</main>
+<footer>
+  <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Berdasarkan aturan Korea tahun 2026.</p>
+  <p><a href="../kebijakan-privasi/">Kebijakan Privasi</a> · &copy; 2026 Hitung Gaji Korea</p>
+</footer>
+<script src="../assets/calc.js"></script>
+<script src="../assets/ui.js"></script>
+</body>
+</html>

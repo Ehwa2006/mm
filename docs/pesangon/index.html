@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator Pesangon Korea (퇴직금) &amp; Asuransi Kepulangan TKI</title>
+<meta name="description" content="Hitung perkiraan pesangon (퇴직금) di Korea dan berapa yang dibayar asuransi kepulangan (출국만기보험) serta selisih dari majikan.">
+<link rel="canonical" href="https://ehwa2006.github.io/mm/pesangon/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kalkulator Pesangon Korea (퇴직금) &amp; Asuransi Kepulangan TKI">
+<meta property="og:description" content="Hitung perkiraan pesangon (퇴직금) di Korea dan berapa yang dibayar asuransi kepulangan (출국만기보험) serta selisih dari majikan.">
+<meta property="og:url" content="https://ehwa2006.github.io/mm/pesangon/">
+<meta property="og:site_name" content="Hitung Gaji Korea">
+<meta property="og:locale" content="id_ID">
+<link rel="stylesheet" href="../assets/style.css">
+
+</head>
+<body>
+<header>
+  <a class="logo" href="../">Hitung Gaji Korea</a>
+  <nav>
+    <a href="../kalkulator-gaji/">Gaji Bersih</a>
+    <a href="../pesangon/" aria-current="page">Pesangon</a>
+    <a href="../pengembalian-pensiun/">Pengembalian Pensiun</a>
+  </nav>
+</header>
+<main>
+<h1>Kalkulator Pesangon Korea (퇴직금)</h1>
+<p class="lead">Pekerja yang bekerja 1 tahun atau lebih berhak atas pesangon. Untuk pekerja EPS, sebagian dibayar lewat asuransi kepulangan (출국만기보험) dan sisanya oleh majikan.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="start">Tanggal mulai kerja</label><input id="start" type="date" value="2023-05-01"></div>
+  <div><label for="last">Hari kerja terakhir</label><input id="last" type="date" value="2026-04-30"></div>
+  <div><label for="w3">Total gaji kotor 3 bulan terakhir (₩)</label><input id="w3" inputmode="numeric" data-money value="9.000.000"><div class="hint">Termasuk lembur, sebelum potongan</div></div>
+  <div><label for="bonus">Bonus per tahun (₩)</label><input id="bonus" inputmode="numeric" data-money value="0"></div>
+</form>
+<div class="card result">
+  <p>Perkiraan pesangon (sebelum pajak)</p>
+  <p class="big" id="pay">-</p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Lama kerja</td><td id="tenure"></td></tr>
+    <tr><td>Upah rata-rata harian (평균임금)</td><td id="avg"></td></tr>
+    <tr><td>Perkiraan dari asuransi kepulangan</td><td id="ins"></td></tr>
+    <tr><td>Selisih yang harus dibayar majikan</td><td id="diff"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Rumus pesangon</h2>
+<p>Pesangon = upah rata-rata harian × 30 hari × (jumlah hari kerja ÷ 365). Upah rata-rata harian = total gaji 3 bulan terakhir (ditambah 3/12 bonus tahunan) ÷ jumlah hari dalam 3 bulan itu.</p>
+<h2>Asuransi kepulangan (출국만기보험) dan selisihnya</h2>
+<p>Majikan pekerja E-9 wajib menyetor sekitar 8,3% gaji bulanan ke asuransi kepulangan. Uang ini dibayar ke Anda setelah keluar dari Korea (atau saat pindah majikan setelah 1 tahun). Jika pesangon menurut rumus lebih besar dari uang asuransi, majikan wajib membayar selisihnya dalam 14 hari setelah berhenti kerja. Banyak pekerja tidak tahu hak atas selisih ini karena lembur membuat pesangon jauh lebih besar.</p>
+<h2>Pertanyaan umum</h2>
+<p><strong>Bagaimana cara klaim asuransi kepulangan?</strong><br>Hubungi Samsung Fire (삼성화재) sebagai pengelola asuransi pekerja EPS, atau tanyakan di bandara saat pulang. Siapkan paspor, tiket pesawat, dan rekening.</p>
+<p><strong>Kerja kurang dari 1 tahun, dapat pesangon?</strong><br>Tidak. Pesangon baru muncul setelah bekerja minimal 1 tahun di majikan yang sama dengan rata-rata 15 jam per minggu atau lebih.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    if (!start.value || !last.value) return;
+    var r = Calc.severance({ startDate: start.value, lastDay: last.value, wages3m: num(w3), annualBonus: num(bonus) });
+    pay.textContent = won(r.severancePay);
+    msg.innerHTML = r.eligible ? '' : '<span class="warn">Lama kerja kurang dari 1 tahun, belum berhak pesangon.</span>';
+    tenure.textContent = r.tenureDays.toLocaleString('id-ID') + ' hari';
+    avg.textContent = won(r.averageDailyWage);
+    ins.textContent = won(r.insuranceEstimate);
+    diff.textContent = won(r.employerDifference);
+  }
+  [start, last, w3, bonus].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>
+
+</main>
+<footer>
+  <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Berdasarkan aturan Korea tahun 2026.</p>
+  <p><a href="../kebijakan-privasi/">Kebijakan Privasi</a> · &copy; 2026 Hitung Gaji Korea</p>
+</footer>
+<script src="../assets/calc.js"></script>
+<script src="../assets/ui.js"></script>
+</body>
+</html>

@@ -1,16 +1,15 @@
-/* 2026년 기준 급여 계산 로직. 브라우저(window.Calc)와 Node(require) 양쪽에서 사용. */
+/* Perhitungan gaji pekerja di Korea (standar 2026). Dipakai di browser (window.Calc) dan Node (require). */
 (function (root) {
   var RATES = {
     year: 2026,
-    pension: 0.0475,            // 국민연금 근로자 부담 (총 9.5%)
-    pensionMin: 410000,         // 기준소득월액 하한 (2026.7~2027.6)
-    pensionMax: 6590000,        // 기준소득월액 상한 (2026.7~2027.6)
-    health: 0.03595,            // 건강보험 근로자 부담 (총 7.19%)
-    longTermCare: 0.9448 / 7.19, // 장기요양 = 건강보험료 × (0.9448% / 7.19%)
-    employment: 0.009,          // 고용보험 근로자 부담
-    minimumWage: 10320,         // 2026 최저시급
-    monthlyHours: 209,          // 주 40시간 + 주휴 기준 월 소정근로시간
-    jobSeekMax: 68100           // 구직급여 1일 상한 (2026)
+    minimumWage: 10320,          // upah minimum per jam 2026
+    monthlyHours: 209,           // jam dasar per bulan (40 jam/minggu + 주휴)
+    pension: 0.0475,             // 국민연금 bagian pekerja (total 9,5%)
+    pensionMin: 410000,          // batas bawah dasar iuran (Jul 2026 - Jun 2027)
+    pensionMax: 6590000,         // batas atas dasar iuran
+    health: 0.03595,             // 건강보험 bagian pekerja
+    longTermCare: 0.9448 / 7.19, // 장기요양 = iuran kesehatan × 13,14%
+    employment: 0.009            // 고용보험 bagian pekerja
   };
 
   function floor10(n) { return Math.floor(n / 10) * 10; }
@@ -48,63 +47,53 @@
     return Math.min(credit, limit);
   }
 
-  function childTaxCredit(children) {
-    if (children <= 0) return 0;
-    if (children === 1) return 150000;
-    if (children === 2) return 350000;
-    return 350000 + (children - 2) * 300000;
-  }
-
-  /* 연봉 실수령액 (연 단위 세액을 추정해 월로 나눈 근사치) */
-  function salary(opts) {
-    var annual = Math.max(0, +opts.annual || 0);
-    var nonTaxMonthly = Math.max(0, +opts.nonTaxMonthly || 0);
-    var dependents = Math.max(1, Math.floor(+opts.dependents || 1));
-    var children = Math.max(0, Math.floor(+opts.children || 0));
-
-    var monthlyGross = annual / 12;
-    var taxableMonthly = Math.max(0, monthlyGross - nonTaxMonthly);
-    var taxableAnnual = taxableMonthly * 12;
-
-    var pensionBase = Math.min(Math.max(taxableMonthly, RATES.pensionMin), RATES.pensionMax);
-    var pension = taxableMonthly > 0 ? floor10(pensionBase * RATES.pension) : 0;
-    var health = floor10(taxableMonthly * RATES.health);
+  /* Potongan bulanan dari gaji kotor bulanan (lajang, tanpa tanggungan). */
+  function deductions(monthlyGross) {
+    var m = Math.max(0, monthlyGross);
+    var pensionBase = Math.min(Math.max(m, RATES.pensionMin), RATES.pensionMax);
+    var pension = m > 0 ? floor10(pensionBase * RATES.pension) : 0;
+    var health = floor10(m * RATES.health);
     var care = floor10(health * RATES.longTermCare);
-    var employment = floor10(taxableMonthly * RATES.employment);
-
-    var incomeAmount = taxableAnnual - earnedIncomeDeduction(taxableAnnual);
-    var taxBase = incomeAmount - 1500000 * dependents - (pension + health + care + employment) * 12;
+    var employment = floor10(m * RATES.employment);
+    var annual = m * 12;
+    var taxBase = annual - earnedIncomeDeduction(annual) - 1500000 - (pension + health + care + employment) * 12;
     var computed = progressiveTax(Math.max(0, taxBase));
-    var credits = earnedIncomeTaxCredit(computed, taxableAnnual) + 130000 + childTaxCredit(children);
-    var annualTax = Math.max(0, computed - credits);
+    var annualTax = Math.max(0, computed - earnedIncomeTaxCredit(computed, annual) - 130000);
     var incomeTax = floor10(annualTax / 12);
     var localTax = floor10(incomeTax * 0.1);
-
-    var deductions = pension + health + care + employment + incomeTax + localTax;
     return {
-      monthlyGross: Math.round(monthlyGross),
       pension: pension, health: health, longTermCare: care, employment: employment,
       incomeTax: incomeTax, localTax: localTax,
-      totalDeductions: deductions,
-      monthlyNet: Math.round(monthlyGross - deductions),
-      annualNet: Math.round((monthlyGross - deductions) * 12)
+      total: pension + health + care + employment + incomeTax + localTax
     };
   }
 
-  /* 주휴수당: 주 15시간 이상 근무 시 (주 소정근로시간/40 × 8시간) × 시급 */
-  function weeklyHolidayPay(opts) {
+  /* Gaji bulanan: gaji pokok + lembur (연장), malam (야간), hari libur (휴일).
+     Tambahan 50% untuk lembur/malam/libur ≤8 jam, 100% untuk libur >8 jam (usaha ≥5 pekerja). */
+  function monthlyPay(opts) {
     var hourly = Math.max(0, +opts.hourly || 0);
-    var hours = Math.max(0, +opts.weeklyHours || 0);
-    var eligible = hours >= 15;
-    var holidayHours = eligible ? Math.min(hours, 40) / 40 * 8 : 0;
-    var weeklyPay = Math.round(holidayHours * hourly);
-    var weeksPerMonth = 365 / 7 / 12;
+    var baseHours = Math.max(0, opts.baseHours == null ? RATES.monthlyHours : +opts.baseHours);
+    var overtime = Math.max(0, +opts.overtimeHours || 0);
+    var night = Math.max(0, +opts.nightHours || 0);
+    var holiday = Math.max(0, +opts.holidayHours || 0);
+    var holidayOver8 = Math.max(0, +opts.holidayOver8Hours || 0);
+    var small = !!opts.smallWorkplace; // usaha <5 pekerja: tanpa tambahan 50%
+
+    var basePay = Math.round(hourly * baseHours);
+    var premium = small ? 1 : 1.5;
+    var overtimePay = Math.round(hourly * overtime * premium);
+    var nightPay = small ? 0 : Math.round(hourly * night * 0.5);
+    var holidayPay = Math.round(hourly * (holiday * premium + holidayOver8 * (small ? 1 : 2)));
+    var gross = basePay + overtimePay + nightPay + holidayPay;
+
+    var d = deductions(gross);
+    var dorm = Math.max(0, +opts.dormDeduction || 0);
+    var net = gross - d.total - dorm;
+    var rate = Math.max(0, +opts.exchangeRate || 0);
     return {
-      eligible: eligible,
-      holidayHours: Math.round(holidayHours * 100) / 100,
-      weeklyHolidayPay: weeklyPay,
-      weeklyTotal: Math.round(hours * hourly) + weeklyPay,
-      monthlyTotal: Math.round((hours + holidayHours) * hourly * weeksPerMonth),
+      basePay: basePay, overtimePay: overtimePay, nightPay: nightPay, holidayPay: holidayPay,
+      gross: gross, deductions: d, dormDeduction: dorm, net: net,
+      netRupiah: rate ? Math.round(net * rate) : null,
       belowMinimum: hourly > 0 && hourly < RATES.minimumWage
     };
   }
@@ -115,94 +104,60 @@
   }
   function daysBetween(a, b) { return Math.round((b - a) / 86400000); }
 
-  /* 퇴직금: 1일 평균임금 × 30일 × (재직일수 / 365). lastDay는 마지막 근무일. */
+  /* Pesangon (퇴직금): upah rata-rata harian × 30 × (hari kerja / 365). lastDay = hari kerja terakhir. */
   function severance(opts) {
     var start = parseDate(opts.startDate);
     var retire = parseDate(opts.lastDay);
-    retire.setUTCDate(retire.getUTCDate() + 1); // 퇴직일 = 마지막 근무일 다음날
+    retire.setUTCDate(retire.getUTCDate() + 1);
     var tenureDays = daysBetween(start, retire);
     var from = new Date(retire);
     from.setUTCMonth(from.getUTCMonth() - 3);
     var periodDays = daysBetween(from, retire);
-    var wages3m = Math.max(0, +opts.wages3m || 0)
-      + Math.max(0, +opts.annualBonus || 0) * 3 / 12
-      + Math.max(0, +opts.annualLeavePay || 0) * 3 / 12;
+    var wages3m = Math.max(0, +opts.wages3m || 0) + Math.max(0, +opts.annualBonus || 0) * 3 / 12;
     var avgDaily = periodDays > 0 ? wages3m / periodDays : 0;
     var eligible = tenureDays >= 365;
+    var pay = eligible ? Math.round(avgDaily * 30 * tenureDays / 365) : 0;
+    // Asuransi kepulangan (출국만기보험): majikan menyetor 8,3% upah bulanan; selisihnya dibayar majikan.
+    var monthlyWage = Math.max(0, +opts.wages3m || 0) / 3;
+    var insuranceEstimate = eligible ? Math.round(monthlyWage * 0.083 * tenureDays / 365 * 12) : 0;
     return {
       eligible: eligible,
       tenureDays: tenureDays,
       periodDays: periodDays,
       averageDailyWage: Math.round(avgDaily),
-      severancePay: eligible ? Math.round(avgDaily * 30 * tenureDays / 365) : 0
+      severancePay: pay,
+      insuranceEstimate: Math.min(insuranceEstimate, pay),
+      employerDifference: Math.max(0, pay - insuranceEstimate)
     };
   }
 
-  /* 시급·월급·연봉 상호 변환 (주 40시간, 월 209시간 기준) */
-  function convertWage(opts) {
-    var amount = Math.max(0, +opts.amount || 0);
-    var hourly;
-    if (opts.from === 'hourly') hourly = amount;
-    else if (opts.from === 'monthly') hourly = amount / RATES.monthlyHours;
-    else hourly = amount / 12 / RATES.monthlyHours;
-    var monthly = hourly * RATES.monthlyHours;
+  /* Pengembalian pensiun (반환일시금): iuran pekerja + majikan + bunga sederhana (perkiraan). */
+  function pensionRefund(opts) {
+    var wage = Math.max(0, +opts.monthlyWage || 0);
+    var start = parseDate(opts.startMonth + '-01');
+    var end = parseDate(opts.endMonth + '-01');
+    var interest = opts.interestRate == null ? 0.03 : +opts.interestRate;
+    var base = Math.min(Math.max(wage, RATES.pensionMin), RATES.pensionMax);
+    var months = 0, contributions = 0, interestTotal = 0;
+    for (var d = new Date(start); d <= end; d.setUTCMonth(d.getUTCMonth() + 1)) {
+      var y = d.getUTCFullYear();
+      var rate = y >= 2026 ? 0.09 + 0.005 * Math.min(y - 2025, 8) : 0.09; // naik 0,5%p per tahun sejak 2026
+      var c = floor10(base * rate);
+      var monthsToEnd = (end.getUTCFullYear() - y) * 12 + end.getUTCMonth() - d.getUTCMonth();
+      contributions += c;
+      interestTotal += c * interest * monthsToEnd / 12;
+      months++;
+    }
     return {
-      hourly: Math.round(hourly),
-      monthly: Math.round(monthly),
-      annual: Math.round(monthly * 12),
-      belowMinimum: hourly > 0 && hourly < RATES.minimumWage,
-      minimumMonthly: RATES.minimumWage * RATES.monthlyHours
+      months: months,
+      contributions: contributions,
+      interest: Math.round(interestTotal),
+      total: Math.round(contributions + interestTotal)
     };
   }
 
-  /* 연차 일수: 입사일 기준. 1년 미만은 매월 1일(최대 11일), 이후 15일 + 2년마다 1일(최대 25일) */
-  function annualLeave(opts) {
-    var start = parseDate(opts.startDate);
-    var on = parseDate(opts.baseDate);
-    var months = (on.getUTCFullYear() - start.getUTCFullYear()) * 12 + on.getUTCMonth() - start.getUTCMonth();
-    if (on.getUTCDate() < start.getUTCDate()) months--;
-    months = Math.max(0, months);
-    var years = Math.floor(months / 12);
-    var days = years < 1 ? Math.min(months, 11) : Math.min(15 + Math.floor((years - 1) / 2), 25);
-    var hourly = Math.max(0, +opts.hourly || 0);
-    var unused = Math.max(0, +opts.unusedDays || 0);
-    return {
-      yearsWorked: years,
-      monthsWorked: months,
-      leaveDays: days,
-      leavePay: Math.round(hourly * Math.max(1, +opts.dailyHours || 8) * unused)
-    };
-  }
-
-  var JOB_SEEK_DAYS = [ // [피보험기간 하한(년), 50세 미만, 50세 이상·장애인]
-    [10, 240, 270], [5, 210, 240], [3, 180, 210], [1, 150, 180], [0, 120, 120]
-  ];
-
-  /* 실업급여(구직급여): 1일 평균임금 × 60%, 상·하한 적용 × 소정급여일수 */
-  function unemployment(opts) {
-    var wages3m = Math.max(0, +opts.wages3m || 0);
-    var periodDays = Math.max(1, +opts.periodDays || 92);
-    var dailyHours = Math.min(8, Math.max(1, +opts.dailyHours || 8));
-    var insuredYears = Math.max(0, +opts.insuredYears || 0);
-    var avgDaily = wages3m / periodDays;
-    var min = RATES.minimumWage * 0.8 * dailyHours;
-    var raw = avgDaily * 0.6;
-    var daily = Math.round(Math.max(min, Math.min(raw, RATES.jobSeekMax)));
-    var row = JOB_SEEK_DAYS.filter(function (r) { return insuredYears >= r[0]; })[0];
-    var days = opts.over50 ? row[2] : row[1];
-    return {
-      averageDailyWage: Math.round(avgDaily),
-      dailyBenefit: daily,
-      cappedAt: raw > RATES.jobSeekMax ? 'max' : raw < min ? 'min' : null,
-      benefitDays: days,
-      monthlyBenefit: daily * 30,
-      totalBenefit: daily * days
-    };
-  }
-
-  var api = { RATES: RATES, salary: salary, weeklyHolidayPay: weeklyHolidayPay,
-    severance: severance, convertWage: convertWage, annualLeave: annualLeave,
-    unemployment: unemployment };
+  var api = { RATES: RATES, deductions: deductions, monthlyPay: monthlyPay,
+    severance: severance, pensionRefund: pensionRefund };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calc = api;
 })(this);

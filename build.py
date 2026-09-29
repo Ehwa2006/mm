@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""src/ 의 페이지 본문을 공통 레이아웃으로 감싸 docs/ 에 정적 사이트를 생성한다.
+"""Membungkus isi halaman di src/pages dengan tata letak bersama dan menulis situs statis ke docs/.
 
-새 계산기를 추가하려면 src/pages/<slug>.html 을 만들고 PAGES 에 한 줄 추가하면 된다.
+Untuk menambah kalkulator: buat src/pages/<slug>.html lalu tambahkan satu baris di PAGES.
 """
 import html
 import json
@@ -10,32 +10,26 @@ import shutil
 from datetime import date
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-# site.json: 도메인, 애드센스 게시자 ID(ca-pub-...), 검색엔진 소유확인 코드를 채우면 전 페이지에 반영된다.
+# site.json: domain, ID penayang AdSense (ca-pub-...), kode verifikasi Search Console.
 with open(os.path.join(ROOT, "site.json"), encoding="utf-8") as _f:
     CONFIG = json.load(_f)
 SITE_URL = (f"https://{CONFIG['custom_domain']}/" if CONFIG.get("custom_domain")
             else CONFIG["site_url"])
-SITE_NAME = "월급계산소"
+SITE_NAME = "Hitung Gaji Korea"
 ADSENSE_CLIENT = CONFIG.get("adsense_client", "")
 
-# (slug, 메뉴 이름, <title>, meta description)
+# (slug, nama menu, <title>, meta description)
 PAGES = [
-    ("", "홈", f"{SITE_NAME} - 2026 연봉 실수령액·주휴수당·퇴직금 계산기",
-     "2026년 4대보험 요율과 최저임금을 반영한 무료 급여 계산기 모음. 연봉 실수령액, 주휴수당, 퇴직금, 시급·월급 변환을 한 곳에서."),
-    ("salary", "연봉 실수령액", "2026 연봉 실수령액 계산기 - 4대보험·소득세 공제 후 월급",
-     "연봉을 입력하면 2026년 국민연금 4.75%, 건강보험 3.595%, 장기요양, 고용보험, 소득세를 공제한 월 실수령액을 바로 계산합니다."),
-    ("weekly-holiday-pay", "주휴수당", "2026 주휴수당 계산기 - 알바 주휴수당 조건과 계산법",
-     "주 15시간 이상 근무하면 받는 주휴수당을 시급과 주 근무시간으로 계산합니다. 2026년 최저시급 10,320원 기준."),
-    ("severance", "퇴직금", "퇴직금 계산기 - 평균임금으로 예상 퇴직금 계산",
-     "입사일, 마지막 근무일, 최근 3개월 급여를 입력하면 1일 평균임금과 예상 퇴직금을 계산합니다."),
-    ("wage-converter", "시급·월급 변환", "시급 월급 연봉 변환기 - 2026 최저임금 확인",
-     "시급, 월급, 연봉을 서로 변환하고 2026년 최저임금(시급 10,320원, 월 2,156,880원) 미달 여부를 확인합니다."),
-    ("annual-leave", "연차", "2026 연차 계산기 - 연차 일수와 연차수당 계산",
-     "입사일 기준으로 발생한 연차 일수(최대 25일)와 미사용 연차수당을 계산합니다. 1년 미만 월차, 3년 이상 가산 연차 반영."),
-    ("unemployment", "실업급여", "2026 실업급여 계산기 - 구직급여 상한 68,100원 반영",
-     "퇴직 전 3개월 급여와 고용보험 가입기간으로 2026년 실업급여 1일 지급액, 받는 기간, 총액을 계산합니다."),
-    ("privacy", "개인정보처리방침", f"개인정보처리방침 - {SITE_NAME}",
-     f"{SITE_NAME}의 개인정보처리방침입니다."),
+    ("", "Beranda", f"{SITE_NAME} - Kalkulator Gaji TKI/EPS di Korea 2026",
+     "Kalkulator gratis untuk pekerja Indonesia di Korea Selatan: gaji bersih dengan lembur, pesangon (퇴직금), dan pengembalian pensiun (반환일시금). Standar 2026."),
+    ("kalkulator-gaji", "Gaji Bersih", "Kalkulator Gaji Korea 2026 - Gaji Bersih + Lembur untuk TKI EPS",
+     "Hitung gaji bersih di Korea 2026 dari upah per jam, lembur, jam malam, dan kerja hari libur. Potongan pensiun, asuransi, pajak, dan asrama. Konversi ke Rupiah."),
+    ("pesangon", "Pesangon", "Kalkulator Pesangon Korea (퇴직금) & Asuransi Kepulangan TKI",
+     "Hitung perkiraan pesangon (퇴직금) di Korea dan berapa yang dibayar asuransi kepulangan (출국만기보험) serta selisih dari majikan."),
+    ("pengembalian-pensiun", "Pengembalian Pensiun", "Kalkulator Pengembalian Pensiun Korea (반환일시금) untuk TKI",
+     "Perkirakan uang pensiun nasional Korea (국민연금) yang bisa diklaim kembali saat pulang ke Indonesia, termasuk iuran majikan dan bunga."),
+    ("kebijakan-privasi", "Kebijakan Privasi", f"Kebijakan Privasi - {SITE_NAME}",
+     f"Kebijakan privasi {SITE_NAME}."),
 ]
 
 SRC = os.path.join(ROOT, "src")
@@ -46,7 +40,7 @@ def nav(current, depth):
     prefix = "../" * depth
     links = []
     for slug, name, *_ in PAGES:
-        if slug in ("", "privacy"):
+        if slug in ("", "kebijakan-privasi"):
             continue
         cur = ' aria-current="page"' if slug == current else ""
         links.append(f'<a href="{prefix}{slug}/"{cur}>{name}</a>')
@@ -57,16 +51,15 @@ def render(slug, title, desc, body):
     depth = 1 if slug else 0
     prefix = "../" * depth
     url = SITE_URL + (slug + "/" if slug else "")
-    ads = ""
-    for key, name in (("google_site_verification", "google-site-verification"),
-                      ("naver_site_verification", "naver-site-verification")):
-        if CONFIG.get(key):
-            ads += f'<meta name="{name}" content="{html.escape(CONFIG[key])}">\n'
+    head_extra = ""
+    if CONFIG.get("google_site_verification"):
+        head_extra += (f'<meta name="google-site-verification" '
+                       f'content="{html.escape(CONFIG["google_site_verification"])}">\n')
     if ADSENSE_CLIENT:
-        ads += (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-               f'?client={ADSENSE_CLIENT}" crossorigin="anonymous"></script>')
+        head_extra += (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+                       f'?client={ADSENSE_CLIENT}" crossorigin="anonymous"></script>')
     return f"""<!doctype html>
-<html lang="ko">
+<html lang="id">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,8 +71,9 @@ def render(slug, title, desc, body):
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:locale" content="id_ID">
 <link rel="stylesheet" href="{prefix}assets/style.css">
-{ads}
+{head_extra}
 </head>
 <body>
 <header>
@@ -92,8 +86,8 @@ def render(slug, title, desc, body):
 {body.replace("{{prefix}}", prefix)}
 </main>
 <footer>
-  <p>계산 결과는 참고용 추정치이며 실제 급여·세액과 다를 수 있습니다. 2026년 요율 기준.</p>
-  <p><a href="{prefix}privacy/">개인정보처리방침</a> · &copy; {date.today().year} {SITE_NAME}</p>
+  <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Berdasarkan aturan Korea tahun 2026.</p>
+  <p><a href="{prefix}kebijakan-privasi/">Kebijakan Privasi</a> · &copy; {date.today().year} {SITE_NAME}</p>
 </footer>
 <script src="{prefix}assets/calc.js"></script>
 <script src="{prefix}assets/ui.js"></script>

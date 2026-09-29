@@ -1,5 +1,5 @@
 {
-  "name": "wolgeup-calc",
+  "name": "hitung-gaji-korea",
   "private": true,
   "scripts": {
     "build": "python3 build.py",

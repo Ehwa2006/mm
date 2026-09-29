@@ -1,0 +1,66 @@
+<h1>Kalkulator Gaji Bersih Korea 2026</h1>
+<p class="lead">Masukkan upah per jam dan jam lembur per bulan. Hasilnya gaji kotor, semua potongan, dan gaji bersih yang diterima.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="hourly">Upah per jam (₩)</label><input id="hourly" inputmode="numeric" data-money value="10.320"><div class="hint">Upah minimum 2026: ₩10.320</div></div>
+  <div><label for="base">Jam dasar per bulan</label><input id="base" type="number" min="0" value="209"><div class="hint">40 jam/minggu = 209 jam</div></div>
+  <div><label for="ot">Jam lembur per bulan (연장)</label><input id="ot" type="number" min="0" step="0.5" value="40"></div>
+  <div><label for="night">Jam kerja malam per bulan (야간)</label><input id="night" type="number" min="0" step="0.5" value="0"><div class="hint">Jam antara 22.00–06.00</div></div>
+  <div><label for="hol">Jam kerja hari libur ≤8 jam (휴일)</label><input id="hol" type="number" min="0" step="0.5" value="0"></div>
+  <div><label for="hol8">Jam kerja hari libur &gt;8 jam</label><input id="hol8" type="number" min="0" step="0.5" value="0"></div>
+  <div><label for="dorm">Potongan asrama/makan (₩)</label><input id="dorm" inputmode="numeric" data-money value="0"></div>
+  <div><label for="rate">Kurs: 1 Won = berapa Rupiah</label><input id="rate" inputmode="decimal" value="11,5"><div class="hint">Cek kurs hari ini di aplikasi kiriman uang</div></div>
+  <div class="check"><input id="small" type="checkbox"><label for="small">Tempat kerja kurang dari 5 pekerja</label></div>
+</form>
+<div class="card result">
+  <p>Perkiraan gaji bersih per bulan</p>
+  <p class="big" id="net">-</p>
+  <p id="netRp"></p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Gaji pokok (기본급)</td><td id="basePay"></td></tr>
+    <tr><td>Upah lembur (연장근로수당)</td><td id="otPay"></td></tr>
+    <tr><td>Tambahan malam (야간근로수당)</td><td id="nightPay"></td></tr>
+    <tr><td>Upah hari libur (휴일근로수당)</td><td id="holPay"></td></tr>
+    <tr><td><strong>Gaji kotor</strong></td><td id="gross"></td></tr>
+    <tr><td>Pensiun nasional (국민연금)</td><td id="pension"></td></tr>
+    <tr><td>Asuransi kesehatan (건강보험)</td><td id="health"></td></tr>
+    <tr><td>Perawatan jangka panjang (장기요양)</td><td id="care"></td></tr>
+    <tr><td>Asuransi ketenagakerjaan (고용보험)</td><td id="emp"></td></tr>
+    <tr><td>Pajak penghasilan (소득세)</td><td id="itax"></td></tr>
+    <tr><td>Pajak daerah (지방소득세)</td><td id="ltax"></td></tr>
+    <tr><td>Asrama/makan</td><td id="dormOut"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Cara menghitung upah lembur di Korea</h2>
+<p>Di tempat kerja dengan 5 pekerja atau lebih, Undang-Undang Standar Ketenagakerjaan Korea (근로기준법) mewajibkan tambahan minimal 50%:</p>
+<ul>
+  <li><strong>Lembur</strong> (lebih dari 8 jam sehari atau 40 jam seminggu): upah per jam × 1,5.</li>
+  <li><strong>Kerja malam</strong> (22.00–06.00): tambahan upah per jam × 0,5. Jika sekaligus lembur, totalnya × 2.</li>
+  <li><strong>Hari libur</strong>: sampai 8 jam × 1,5, lebih dari 8 jam × 2.</li>
+</ul>
+<p>Contoh: upah ₩10.320 dan lembur 40 jam sebulan → 40 × ₩10.320 × 1,5 = ₩619.200.</p>
+<h2>Pertanyaan umum</h2>
+<p><strong>Kenapa gaji bersih saya sedikit berbeda?</strong><br>Perusahaan memotong pajak memakai tabel resmi (간이세액표), dan sebagian upah lembur pekerja produksi bisa bebas pajak. Jadi pajak sebenarnya bisa sedikit lebih kecil. Kelebihan pajak dikembalikan lewat penyesuaian pajak tahunan (연말정산) setiap Februari.</p>
+<p><strong>Apakah pekerja asing wajib bayar pensiun nasional?</strong><br>Ya, pemegang visa E-9 ikut 국민연금. Uangnya bisa diklaim kembali saat pulang. Hitung perkiraannya di <a href="{{prefix}}pengembalian-pensiun/">kalkulator pengembalian pensiun</a>.</p>
+<p><strong>Upah saya di bawah ₩10.320 per jam, apakah boleh?</strong><br>Tidak. Laporkan ke kantor ketenagakerjaan (고용노동부, telepon 1350, tersedia penerjemah) atau pusat dukungan pekerja asing.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.monthlyPay({ hourly: num(hourly), baseHours: num(base), overtimeHours: num(ot), nightHours: num(night),
+      holidayHours: num(hol), holidayOver8Hours: num(hol8), dormDeduction: num(dorm), exchangeRate: num(rate), smallWorkplace: small.checked });
+    net.textContent = won(r.net);
+    netRp.textContent = r.netRupiah ? '≈ ' + rp(r.netRupiah) : '';
+    msg.innerHTML = r.belowMinimum ? '<span class="warn">Upah per jam di bawah upah minimum 2026 (₩10.320).</span>' : '';
+    basePay.textContent = won(r.basePay); otPay.textContent = won(r.overtimePay);
+    nightPay.textContent = won(r.nightPay); holPay.textContent = won(r.holidayPay);
+    gross.textContent = won(r.gross);
+    pension.textContent = minus(r.deductions.pension); health.textContent = minus(r.deductions.health);
+    care.textContent = minus(r.deductions.longTermCare); emp.textContent = minus(r.deductions.employment);
+    itax.textContent = minus(r.deductions.incomeTax); ltax.textContent = minus(r.deductions.localTax);
+    dormOut.textContent = minus(r.dormDeduction);
+  }
+  [hourly, base, ot, night, hol, hol8, dorm, rate, small].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>
