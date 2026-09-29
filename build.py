@@ -4,14 +4,19 @@
 새 계산기를 추가하려면 src/pages/<slug>.html 을 만들고 PAGES 에 한 줄 추가하면 된다.
 """
 import html
+import json
 import os
 import shutil
 from datetime import date
 
-SITE_URL = os.environ.get("SITE_URL", "https://ehwa2006.github.io/mm/")
+ROOT = os.path.dirname(os.path.abspath(__file__))
+# site.json: 도메인, 애드센스 게시자 ID(ca-pub-...), 검색엔진 소유확인 코드를 채우면 전 페이지에 반영된다.
+with open(os.path.join(ROOT, "site.json"), encoding="utf-8") as _f:
+    CONFIG = json.load(_f)
+SITE_URL = (f"https://{CONFIG['custom_domain']}/" if CONFIG.get("custom_domain")
+            else CONFIG["site_url"])
 SITE_NAME = "월급계산소"
-# 애드센스 승인 후 게시자 ID(ca-pub-...)를 넣으면 모든 페이지에 광고 스크립트가 들어간다.
-ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "")
+ADSENSE_CLIENT = CONFIG.get("adsense_client", "")
 
 # (slug, 메뉴 이름, <title>, meta description)
 PAGES = [
@@ -25,11 +30,14 @@ PAGES = [
      "입사일, 마지막 근무일, 최근 3개월 급여를 입력하면 1일 평균임금과 예상 퇴직금을 계산합니다."),
     ("wage-converter", "시급·월급 변환", "시급 월급 연봉 변환기 - 2026 최저임금 확인",
      "시급, 월급, 연봉을 서로 변환하고 2026년 최저임금(시급 10,320원, 월 2,156,880원) 미달 여부를 확인합니다."),
+    ("annual-leave", "연차", "2026 연차 계산기 - 연차 일수와 연차수당 계산",
+     "입사일 기준으로 발생한 연차 일수(최대 25일)와 미사용 연차수당을 계산합니다. 1년 미만 월차, 3년 이상 가산 연차 반영."),
+    ("unemployment", "실업급여", "2026 실업급여 계산기 - 구직급여 상한 68,100원 반영",
+     "퇴직 전 3개월 급여와 고용보험 가입기간으로 2026년 실업급여 1일 지급액, 받는 기간, 총액을 계산합니다."),
     ("privacy", "개인정보처리방침", f"개인정보처리방침 - {SITE_NAME}",
      f"{SITE_NAME}의 개인정보처리방침입니다."),
 ]
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
 OUT = os.path.join(ROOT, "docs")
 
@@ -50,8 +58,12 @@ def render(slug, title, desc, body):
     prefix = "../" * depth
     url = SITE_URL + (slug + "/" if slug else "")
     ads = ""
+    for key, name in (("google_site_verification", "google-site-verification"),
+                      ("naver_site_verification", "naver-site-verification")):
+        if CONFIG.get(key):
+            ads += f'<meta name="{name}" content="{html.escape(CONFIG[key])}">\n'
     if ADSENSE_CLIENT:
-        ads = (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+        ads += (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
                f'?client={ADSENSE_CLIENT}" crossorigin="anonymous"></script>')
     return f"""<!doctype html>
 <html lang="ko">
@@ -117,6 +129,9 @@ def main():
         pub = ADSENSE_CLIENT.replace("ca-", "")
         with open(os.path.join(OUT, "ads.txt"), "w", encoding="utf-8") as f:
             f.write(f"google.com, {pub}, DIRECT, f08c47fec0942fa0\n")
+    if CONFIG.get("custom_domain"):
+        with open(os.path.join(OUT, "CNAME"), "w", encoding="utf-8") as f:
+            f.write(CONFIG["custom_domain"] + "\n")
     open(os.path.join(OUT, ".nojekyll"), "w").close()
     print(f"built {len(PAGES)} pages -> {OUT}")
 

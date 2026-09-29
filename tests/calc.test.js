@@ -56,3 +56,29 @@ test('변환기: 최저시급 → 월 2,156,880원', () => {
   assert.strictEqual(r.belowMinimum, false);
   assert.strictEqual(C.convertWage({ from: 'monthly', amount: 2000000 }).belowMinimum, true);
 });
+
+test('연차: 1년 미만은 개월 수, 1년 15일, 3년 16일, 상한 25일', () => {
+  assert.strictEqual(C.annualLeave({ startDate: '2026-01-01', baseDate: '2026-07-15' }).leaveDays, 6);
+  assert.strictEqual(C.annualLeave({ startDate: '2025-01-01', baseDate: '2025-12-31' }).leaveDays, 11);
+  assert.strictEqual(C.annualLeave({ startDate: '2025-01-01', baseDate: '2026-01-01' }).leaveDays, 15);
+  assert.strictEqual(C.annualLeave({ startDate: '2023-01-01', baseDate: '2026-01-01' }).leaveDays, 16);
+  assert.strictEqual(C.annualLeave({ startDate: '1990-01-01', baseDate: '2026-01-01' }).leaveDays, 25);
+});
+
+test('연차수당: 시급 × 8시간 × 미사용일수', () => {
+  assert.strictEqual(C.annualLeave({ startDate: '2024-01-01', baseDate: '2026-01-01', hourly: 12000, unusedDays: 5 }).leavePay, 480000);
+});
+
+test('실업급여: 상한 68,100원, 하한 66,048원(8시간)', () => {
+  const hi = C.unemployment({ wages3m: 15000000, periodDays: 92, insuredYears: 5 });
+  assert.strictEqual(hi.dailyBenefit, 68100);
+  assert.strictEqual(hi.cappedAt, 'max');
+  assert.strictEqual(hi.benefitDays, 210);
+  const lo = C.unemployment({ wages3m: 3000000, periodDays: 92, insuredYears: 0.5 });
+  assert.strictEqual(lo.dailyBenefit, 66048);
+  assert.strictEqual(lo.benefitDays, 120);
+});
+
+test('실업급여: 50세 이상은 소정급여일수가 길다', () => {
+  assert.strictEqual(C.unemployment({ wages3m: 9000000, insuredYears: 10, over50: true }).benefitDays, 270);
+});

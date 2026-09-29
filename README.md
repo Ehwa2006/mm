@@ -5,6 +5,8 @@
 - 연봉 실수령액 계산기 (`/salary/`)
 - 주휴수당 계산기 (`/weekly-holiday-pay/`)
 - 퇴직금 계산기 (`/severance/`)
+- 실업급여 계산기 (`/unemployment/`)
+- 연차 계산기 (`/annual-leave/`)
 - 시급·월급·연봉 변환기 (`/wage-converter/`)
 
 서버 없이 동작하는 정적 사이트라서 호스팅 비용이 없어요. 계산은 모두 브라우저에서 이루어져요.
@@ -26,13 +28,30 @@ npm test        # 계산 로직 테스트
 
 `src/` 를 고친 뒤에는 반드시 `npm run build` 를 실행해서 `docs/` 까지 함께 커밋해야 해요.
 
-## 수익화 순서 (직접 하셔야 하는 일)
+## 설정 (`site.json`)
 
-1. **공개하기**: 이 브랜치를 `main` 에 병합한 뒤, GitHub 저장소 Settings → Pages 에서 Source 를 `main` 브랜치의 `/docs` 폴더로 지정해요. 몇 분 뒤 `https://ehwa2006.github.io/mm/` 에서 열려요.
-2. **도메인 연결 (약 1~2만 원/년)**: AdSense 는 `github.io` 같은 남의 도메인을 승인하지 않아서 직접 소유한 도메인이 필요해요. 도메인을 사서 Pages 설정의 Custom domain 에 입력하고, `SITE_URL=https://내도메인/ npm run build` 로 다시 빌드해요.
-3. **검색 등록**: [Google Search Console](https://search.google.com/search-console)과 [네이버 서치어드바이저](https://searchadvisor.naver.com)에 사이트를 등록하고 `sitemap.xml` 을 제출해요. 한국 검색 유입의 상당 부분이 네이버라서 둘 다 해야 해요.
-4. **AdSense 신청**: [AdSense](https://adsense.google.com)에 사이트를 등록해요. 승인되면 받은 게시자 ID로 `ADSENSE_CLIENT=ca-pub-XXXXXXXX SITE_URL=https://내도메인/ npm run build` 를 실행해 광고 스크립트와 `ads.txt` 를 넣고 커밋해요.
-5. **정산 정보**: AdSense 에 지급 계좌와 세금 정보를 입력해요. 누적 수익이 100달러를 넘으면 지급돼요.
+| 키 | 내용 |
+| --- | --- |
+| `custom_domain` | 연결한 도메인 (예: `wolgeup.kr`). 채우면 `CNAME` 이 생성되고 모든 주소가 이 도메인으로 바뀐다 |
+| `adsense_client` | AdSense 게시자 ID (`ca-pub-...`). 채우면 광고 스크립트와 `ads.txt` 가 생성된다 |
+| `google_site_verification` | Google Search Console HTML 태그 소유확인 코드 |
+| `naver_site_verification` | 네이버 서치어드바이저 HTML 태그 소유확인 코드 |
+
+값을 바꾼 뒤 `npm run build` 하고 `docs/` 까지 커밋한다.
+
+## 수익화 순서
+
+사람이 직접 해야 하는 일(계정·본인인증·결제·계좌)만 ☐ 로 표시했다. 나머지는 코드로 처리한다.
+
+1. ☐ 저장소를 공개(public)로 전환하고 Settings → Pages 에서 Source 를 기본 브랜치의 `/docs` 로 지정 (비공개 저장소는 유료 플랜에서만 Pages 사용 가능)
+2. ☐ 도메인 구입 (연 1~2만 원). AdSense 는 `github.io` 주소를 승인하지 않는다
+3. ☐ 도메인 업체 DNS 에 GitHub Pages 레코드 입력: A 레코드 `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` / `www` CNAME `ehwa2006.github.io`
+4. `site.json` 의 `custom_domain` 설정 후 빌드
+5. ☐ Google Search Console·네이버 서치어드바이저 가입 후 HTML 태그 소유확인 코드 발급
+6. `site.json` 에 소유확인 코드 입력 후 빌드, 두 곳에 `sitemap.xml` 제출
+7. ☐ AdSense 가입, 본인인증, 게시자 ID 발급
+8. `site.json` 의 `adsense_client` 설정 후 빌드
+9. ☐ AdSense 승인 후 지급 계좌·세금 정보 등록. 누적 100달러부터 지급
 
 ## 현실적인 기대치
 
@@ -42,4 +61,4 @@ npm test        # 계산 로직 테스트
 
 ## 다음에 추가할 계산기 후보
 
-실업급여, 연차 일수·연차수당, 야간·연장근로수당, 4대보험(사업주 부담 포함), 프리랜서 3.3% 환급, 연말정산 환급 예상, 육아휴직 급여, 전월세 전환율, 중도상환수수료.
+야간·연장근로수당, 4대보험(사업주 부담 포함), 프리랜서 3.3% 환급, 연말정산 환급 예상, 육아휴직 급여, 전월세 전환율, 중도상환수수료.

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 연차 계산기 - 연차 일수와 연차수당 계산</title>
+<meta name="description" content="입사일 기준으로 발생한 연차 일수(최대 25일)와 미사용 연차수당을 계산합니다. 1년 미만 월차, 3년 이상 가산 연차 반영.">
+<link rel="canonical" href="https://ehwa2006.github.io/mm/annual-leave/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026 연차 계산기 - 연차 일수와 연차수당 계산">
+<meta property="og:description" content="입사일 기준으로 발생한 연차 일수(최대 25일)와 미사용 연차수당을 계산합니다. 1년 미만 월차, 3년 이상 가산 연차 반영.">
+<meta property="og:url" content="https://ehwa2006.github.io/mm/annual-leave/">
+<meta property="og:site_name" content="월급계산소">
+<link rel="stylesheet" href="../assets/style.css">
+
+</head>
+<body>
+<header>
+  <a class="logo" href="../">월급계산소</a>
+  <nav>
+    <a href="../salary/">연봉 실수령액</a>
+    <a href="../weekly-holiday-pay/">주휴수당</a>
+    <a href="../severance/">퇴직금</a>
+    <a href="../wage-converter/">시급·월급 변환</a>
+    <a href="../annual-leave/" aria-current="page">연차</a>
+    <a href="../unemployment/">실업급여</a>
+  </nav>
+</header>
+<main>
+<h1>2026 연차 계산기</h1>
+<p class="lead">입사일과 기준일로 발생한 연차 일수를 계산하고, 쓰지 못한 연차의 연차수당을 계산합니다.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="start">입사일</label><input id="start" type="date" value="2024-03-04"></div>
+  <div><label for="base">기준일</label><input id="base" type="date" value="2026-09-30"></div>
+  <div><label for="hourly">통상시급 (원)</label><input id="hourly" inputmode="numeric" data-money value="12,000"><div class="hint">월 통상임금 ÷ 209</div></div>
+  <div><label for="unused">미사용 연차 일수</label><input id="unused" type="number" min="0" value="5"></div>
+</form>
+<div class="card result">
+  <p>올해 발생 연차</p>
+  <p class="big" id="days">-</p>
+  <table>
+    <tr><td>근속기간</td><td id="tenure"></td></tr>
+    <tr><td>미사용 연차수당 (세전)</td><td id="pay"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>연차 발생 기준</h2>
+<ul>
+  <li>입사 1년 미만: 한 달 개근할 때마다 1일, 최대 11일.</li>
+  <li>1년 이상 근무하고 출근율 80% 이상: 15일.</li>
+  <li>3년 이상 근무: 최초 1년을 넘은 뒤 2년마다 1일씩 더해 최대 25일.</li>
+  <li>상시 근로자 5인 미만 사업장은 연차 규정이 적용되지 않습니다.</li>
+</ul>
+<h2>연차수당 계산법</h2>
+<p>연차수당 = 통상시급 × 1일 소정근로시간(보통 8시간) × 미사용 연차 일수. 회사가 연차 사용 촉진 절차를 제대로 거쳤다면 미사용 연차에 대한 수당 지급 의무가 없어질 수 있습니다.</p>
+<p>이 계산기는 입사일 기준입니다. 회계연도(1월 1일) 기준으로 운영하는 회사는 일수가 다를 수 있습니다.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    if (!start.value || !base.value) return;
+    var r = Calc.annualLeave({ startDate: start.value, baseDate: base.value, hourly: num(hourly), unusedDays: num(unused) });
+    days.textContent = r.leaveDays + '일';
+    tenure.textContent = r.yearsWorked + '년 ' + (r.monthsWorked % 12) + '개월';
+    pay.textContent = won(r.leavePay);
+  }
+  [start, base, hourly, unused].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>
+
+</main>
+<footer>
+  <p>계산 결과는 참고용 추정치이며 실제 급여·세액과 다를 수 있습니다. 2026년 요율 기준.</p>
+  <p><a href="../privacy/">개인정보처리방침</a> · &copy; 2026 월급계산소</p>
+</footer>
+<script src="../assets/calc.js"></script>
+<script src="../assets/ui.js"></script>
+</body>
+</html>

@@ -9,7 +9,8 @@
     longTermCare: 0.9448 / 7.19, // 장기요양 = 건강보험료 × (0.9448% / 7.19%)
     employment: 0.009,          // 고용보험 근로자 부담
     minimumWage: 10320,         // 2026 최저시급
-    monthlyHours: 209           // 주 40시간 + 주휴 기준 월 소정근로시간
+    monthlyHours: 209,          // 주 40시간 + 주휴 기준 월 소정근로시간
+    jobSeekMax: 68100           // 구직급여 1일 상한 (2026)
   };
 
   function floor10(n) { return Math.floor(n / 10) * 10; }
@@ -154,8 +155,54 @@
     };
   }
 
+  /* 연차 일수: 입사일 기준. 1년 미만은 매월 1일(최대 11일), 이후 15일 + 2년마다 1일(최대 25일) */
+  function annualLeave(opts) {
+    var start = parseDate(opts.startDate);
+    var on = parseDate(opts.baseDate);
+    var months = (on.getUTCFullYear() - start.getUTCFullYear()) * 12 + on.getUTCMonth() - start.getUTCMonth();
+    if (on.getUTCDate() < start.getUTCDate()) months--;
+    months = Math.max(0, months);
+    var years = Math.floor(months / 12);
+    var days = years < 1 ? Math.min(months, 11) : Math.min(15 + Math.floor((years - 1) / 2), 25);
+    var hourly = Math.max(0, +opts.hourly || 0);
+    var unused = Math.max(0, +opts.unusedDays || 0);
+    return {
+      yearsWorked: years,
+      monthsWorked: months,
+      leaveDays: days,
+      leavePay: Math.round(hourly * Math.max(1, +opts.dailyHours || 8) * unused)
+    };
+  }
+
+  var JOB_SEEK_DAYS = [ // [피보험기간 하한(년), 50세 미만, 50세 이상·장애인]
+    [10, 240, 270], [5, 210, 240], [3, 180, 210], [1, 150, 180], [0, 120, 120]
+  ];
+
+  /* 실업급여(구직급여): 1일 평균임금 × 60%, 상·하한 적용 × 소정급여일수 */
+  function unemployment(opts) {
+    var wages3m = Math.max(0, +opts.wages3m || 0);
+    var periodDays = Math.max(1, +opts.periodDays || 92);
+    var dailyHours = Math.min(8, Math.max(1, +opts.dailyHours || 8));
+    var insuredYears = Math.max(0, +opts.insuredYears || 0);
+    var avgDaily = wages3m / periodDays;
+    var min = RATES.minimumWage * 0.8 * dailyHours;
+    var raw = avgDaily * 0.6;
+    var daily = Math.round(Math.max(min, Math.min(raw, RATES.jobSeekMax)));
+    var row = JOB_SEEK_DAYS.filter(function (r) { return insuredYears >= r[0]; })[0];
+    var days = opts.over50 ? row[2] : row[1];
+    return {
+      averageDailyWage: Math.round(avgDaily),
+      dailyBenefit: daily,
+      cappedAt: raw > RATES.jobSeekMax ? 'max' : raw < min ? 'min' : null,
+      benefitDays: days,
+      monthlyBenefit: daily * 30,
+      totalBenefit: daily * days
+    };
+  }
+
   var api = { RATES: RATES, salary: salary, weeklyHolidayPay: weeklyHolidayPay,
-    severance: severance, convertWage: convertWage };
+    severance: severance, convertWage: convertWage, annualLeave: annualLeave,
+    unemployment: unemployment };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calc = api;
 })(this);
