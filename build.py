@@ -63,6 +63,12 @@ PAGES = [
      "Syarat dan langkah program pekerja setia (성실근로자) untuk kembali bekerja di Korea tanpa EPS-TOPIK, total sampai 9 tahun 8 bulan."),
     ("alur-eps", "panduan", "Alur EPS", "Alur Kerja ke Korea Lewat EPS: EPS-TOPIK Sampai Mulai Bekerja",
      "Tahapan program EPS G to G ke Korea: ujian EPS-TOPIK, tes keterampilan, job roster, kontrak, visa, pendidikan, dan hal yang perlu diurus setelah tiba."),
+    ("kartu-arc", "panduan", "Kartu ARC", "Kartu Registrasi Orang Asing Korea (ARC): Registrasi, Pindah Alamat, Kartu Hilang",
+     "Batas waktu registrasi orang asing di Korea (90 hari), lapor pindah alamat (15 hari), dan ganti kartu ARC hilang (14 hari, ₩35.000)."),
+    ("perpanjangan-kerja", "panduan", "Perpanjangan Kerja", "Perpanjangan Masa Kerja E-9 di Korea: 3 Tahun Menjadi 4 Tahun 10 Bulan (재고용)",
+     "Cara memperpanjang masa kerja pekerja E-9 sampai 1 tahun 10 bulan: pengajuan majikan 60–7 hari sebelum habis dan perpanjangan izin tinggal."),
+    ("aplikasi-penting", "panduan", "Aplikasi Penting", "Aplikasi Penting untuk Pekerja Indonesia di Korea: Chat, Penerjemah, Peta, Taksi",
+     "Aplikasi yang wajib dipunya pekerja asing di Korea: KakaoTalk, Papago, Naver Map, Kakao T, HiKorea, dan tips menghindari penipuan."),
     ("nomor-penting", "panduan", "Nomor Penting", "Nomor Telepon Penting untuk Pekerja Indonesia di Korea (Bahasa Indonesia)",
      "Nomor darurat dan layanan bantuan di Korea yang melayani bahasa Indonesia: 1577-0071, 1345, serta 1350, 1355, dan nomor kecelakaan kerja."),
     ("tentang", "situs", "Tentang", f"Tentang {SITE_NAME}",
@@ -136,6 +142,14 @@ SOURCES = {
     ],
     "alur-eps": [
         ("Employment Permit System (EPS)", "https://www.eps.go.kr/"),
+    ],
+    "kartu-arc": [
+        ("찾기쉬운 생활법령정보: registrasi dan laporan perubahan pekerja asing", "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2042&ccfNo=4&cciNo=1&cnpClsNo=1"),
+        ("Gov24: laporan pindah alamat orang asing", "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000026"),
+    ],
+    "perpanjangan-kerja": [
+        ("찾기쉬운 생활법령정보: perpanjangan masa kerja (재고용)", "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2042&ccfNo=3&cciNo=2&cnpClsNo=2"),
+        ("Kementerian Ketenagakerjaan: perpanjangan 1 tahun 10 bulan", "https://www.moel.go.kr/local/uijeongbu/info/dataroom/view.do?bbs_seq=20220700794"),
     ],
     "nomor-penting": [
         ("Imigrasi Korea: Pusat Informasi Orang Asing 1345", "https://www.immigration.go.kr/immigration/1530/subview.do"),
