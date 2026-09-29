@@ -1,0 +1,57 @@
+<h1>Kalkulator Tunjangan Pengangguran Korea (실업급여) untuk Pekerja E-9</h1>
+<p class="lead">Pekerja asing juga bisa menerima tunjangan pengangguran (구직급여) jika memenuhi syarat. Hitung berapa per hari dan berapa lama. Batas atas 2026: ₩68.100 per hari.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="w3">Total gaji kotor 3 bulan terakhir (₩)</label><input id="w3" inputmode="numeric" data-money value="8.400.000"></div>
+  <div><label for="pd">Jumlah hari dalam 3 bulan itu</label><input id="pd" type="number" min="89" max="92" value="92"></div>
+  <div><label for="years">Lama ikut asuransi (tahun)</label><input id="years" type="number" min="0" step="0.5" value="2"></div>
+  <div><label for="hours">Jam kerja per hari</label><input id="hours" type="number" min="1" max="8" value="8"></div>
+  <div><label for="age">Usia saat berhenti kerja</label>
+    <select id="age"><option value="0">Di bawah 50 tahun</option><option value="1">50 tahun ke atas / disabilitas</option></select></div>
+</form>
+<div class="card result">
+  <p>Perkiraan total tunjangan</p>
+  <p class="big" id="total">-</p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Upah rata-rata harian</td><td id="avg"></td></tr>
+    <tr><td>Tunjangan per hari</td><td id="daily"></td></tr>
+    <tr><td>Per bulan (30 hari)</td><td id="month"></td></tr>
+    <tr><td>Lama menerima</td><td id="bdays"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Syarat untuk pekerja E-9</h2>
+<ul>
+  <li><strong>Harus sudah mendaftar bagian tunjangan pengangguran.</strong> Untuk pekerja E-9, bagian ini tidak otomatis. Cara cek paling mudah: jika slip gaji Anda ada potongan 고용보험 sekitar 0,9%, berarti Anda sudah ikut.</li>
+  <li>Sudah membayar asuransi minimal 180 hari dalam 18 bulan sebelum berhenti kerja.</li>
+  <li>Berhenti bukan karena keinginan sendiri: kontrak diakhiri majikan, perusahaan tutup, PHK, atau alasan sah seperti gaji tidak dibayar.</li>
+  <li>Aktif mencari kerja dan melapor ke Pusat Ketenagakerjaan (고용센터) sesuai jadwal.</li>
+</ul>
+<h2>Cara menghitung</h2>
+<p>Tunjangan per hari = 60% dari upah rata-rata harian. Tahun 2026 batas atasnya ₩68.100 dan batas bawahnya 80% upah minimum × jam kerja per hari (₩66.048 untuk 8 jam). Lama menerima 120–270 hari tergantung lama ikut asuransi dan usia.</p>
+<table class="card">
+  <tr><td><strong>Lama ikut asuransi</strong></td><td><strong>&lt;50 tahun / ≥50 tahun</strong></td></tr>
+  <tr><td>Kurang dari 1 tahun</td><td>120 / 120 hari</td></tr>
+  <tr><td>1–3 tahun</td><td>150 / 180 hari</td></tr>
+  <tr><td>3–5 tahun</td><td>180 / 210 hari</td></tr>
+  <tr><td>5–10 tahun</td><td>210 / 240 hari</td></tr>
+  <tr><td>10 tahun atau lebih</td><td>240 / 270 hari</td></tr>
+</table>
+<h2>Cara mendaftar ikut asuransi</h2>
+<p>Pekerja dan majikan mengajukan formulir pendaftaran asuransi ketenagakerjaan untuk pekerja asing (외국인 고용보험 가입신청서) ke Pusat Ketenagakerjaan. Tanyakan ke majikan atau ke Pusat Konsultasi Pekerja Asing di 1577-0071 (bahasa Indonesia).</p>
+<p>Ingat juga batas waktu <a href="{{prefix}}pindah-kerja/">pindah tempat kerja</a>: daftar cari kerja dalam 1 bulan dan dapat tempat kerja baru dalam 3 bulan.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.unemployment({ wages3m: num(w3), periodDays: num(pd), insuredYears: num(years), dailyHours: num(hours), over50: age.value === '1' });
+    total.textContent = won(r.totalBenefit);
+    msg.textContent = r.cappedAt === 'max' ? 'Batas atas ₩68.100 per hari diterapkan.' : r.cappedAt === 'min' ? 'Batas bawah (80% upah minimum) diterapkan.' : '';
+    avg.textContent = won(r.averageDailyWage);
+    daily.textContent = won(r.dailyBenefit);
+    month.textContent = won(r.monthlyBenefit);
+    bdays.textContent = r.benefitDays + ' hari';
+  }
+  [w3, pd, years, hours, age].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

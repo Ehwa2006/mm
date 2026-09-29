@@ -23,10 +23,8 @@
     <a href="../kalkulator-gaji/" aria-current="page">Gaji Bersih</a>
     <a href="../pesangon/">Pesangon</a>
     <a href="../pengembalian-pensiun/">Pengembalian Pensiun</a>
-    <a href="../uang-libur-mingguan/">Uang Libur Mingguan</a>
-    <a href="../cuti-tahunan/">Cuti Tahunan</a>
-    <a href="../pindah-kerja/">Pindah Kerja</a>
-    <a href="../upah-minimum/">Upah Minimum</a>
+    <a href="../tunjangan-pengangguran/">Tunjangan Pengangguran</a>
+    <a href="../">Semua</a>
   </nav>
 </header>
 <main>
@@ -42,6 +40,7 @@
   <div><label for="dorm">Potongan asrama/makan (₩)</label><input id="dorm" inputmode="numeric" data-money value="0"></div>
   <div><label for="rate">Kurs: 1 Won = berapa Rupiah</label><input id="rate" inputmode="decimal" value="11,5"><div class="hint">Cek kurs hari ini di aplikasi kiriman uang</div></div>
   <div class="check"><input id="small" type="checkbox"><label for="small">Tempat kerja kurang dari 5 pekerja</label></div>
+  <div class="check"><input id="ei" type="checkbox" checked><label for="ei">Ikut asuransi pengangguran (고용보험 0,9%)</label></div>
 </form>
 <div class="card result">
   <p>Perkiraan gaji bersih per bulan</p>
@@ -75,12 +74,13 @@
 <h2>Pertanyaan umum</h2>
 <p><strong>Kenapa gaji bersih saya sedikit berbeda?</strong><br>Perusahaan memotong pajak memakai tabel resmi (간이세액표), dan sebagian upah lembur pekerja produksi bisa bebas pajak. Jadi pajak sebenarnya bisa sedikit lebih kecil. Kelebihan pajak dikembalikan lewat penyesuaian pajak tahunan (연말정산) setiap Februari.</p>
 <p><strong>Apakah pekerja asing wajib bayar pensiun nasional?</strong><br>Ya, pemegang visa E-9 ikut 국민연금. Uangnya bisa diklaim kembali saat pulang. Hitung perkiraannya di <a href="../pengembalian-pensiun/">kalkulator pengembalian pensiun</a>.</p>
-<p><strong>Upah saya di bawah ₩10.320 per jam, apakah boleh?</strong><br>Tidak. Laporkan ke kantor ketenagakerjaan (고용노동부, telepon 1350, tersedia penerjemah) atau pusat dukungan pekerja asing.</p>
+<p><strong>Kenapa slip gaji saya tidak ada potongan 고용보험?</strong><br>Untuk pekerja E-9, bagian tunjangan pengangguran (실업급여) dari asuransi ketenagakerjaan hanya berlaku jika Anda mendaftar. Jika tidak ada potongan 0,9%, Anda belum ikut dan tidak bisa menerima <a href="../tunjangan-pengangguran/">tunjangan pengangguran</a>.</p>
+<p><strong>Upah saya di bawah ₩10.320 per jam, apakah boleh?</strong><br>Tidak. Laporkan ke kantor ketenagakerjaan (고용노동부, telepon 1350). Untuk konsultasi dalam bahasa Indonesia, hubungi Pusat Konsultasi Pekerja Asing (외국인력상담센터) di 1577-0071 atau pusat dukungan pekerja asing.</p>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   function run() {
     var r = Calc.monthlyPay({ hourly: num(hourly), baseHours: num(base), overtimeHours: num(ot), nightHours: num(night),
-      holidayHours: num(hol), holidayOver8Hours: num(hol8), dormDeduction: num(dorm), exchangeRate: num(rate), smallWorkplace: small.checked });
+      holidayHours: num(hol), holidayOver8Hours: num(hol8), dormDeduction: num(dorm), exchangeRate: num(rate), smallWorkplace: small.checked, noEmploymentInsurance: !ei.checked });
     net.textContent = won(r.net);
     netRp.textContent = r.netRupiah ? '≈ ' + rp(r.netRupiah) : '';
     msg.innerHTML = r.belowMinimum ? '<span class="warn">Upah per jam di bawah upah minimum 2026 (₩10.320).</span>' : '';
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     itax.textContent = minus(r.deductions.incomeTax); ltax.textContent = minus(r.deductions.localTax);
     dormOut.textContent = minus(r.dormDeduction);
   }
-  [hourly, base, ot, night, hol, hol8, dorm, rate, small].forEach(function (el) { el.addEventListener('input', run); });
+  [hourly, base, ot, night, hol, hol8, dorm, rate, small, ei].forEach(function (el) { el.addEventListener('input', run); });
   run();
 });
 </script>

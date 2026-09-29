@@ -9,7 +9,8 @@
     pensionMax: 6590000,         // batas atas dasar iuran
     health: 0.03595,             // 건강보험 bagian pekerja
     longTermCare: 0.9448 / 7.19, // 장기요양 = iuran kesehatan × 13,14%
-    employment: 0.009            // 고용보험 bagian pekerja
+    employment: 0.009,           // 고용보험 bagian pekerja (bagian tunjangan pengangguran)
+    jobSeekMax: 68100            // batas atas tunjangan pengangguran per hari (2026)
   };
 
   function floor10(n) { return Math.floor(n / 10) * 10; }
@@ -48,13 +49,13 @@
   }
 
   /* Potongan bulanan dari gaji kotor bulanan (lajang, tanpa tanggungan). */
-  function deductions(monthlyGross) {
+  function deductions(monthlyGross, noEmploymentInsurance) {
     var m = Math.max(0, monthlyGross);
     var pensionBase = Math.min(Math.max(m, RATES.pensionMin), RATES.pensionMax);
     var pension = m > 0 ? floor10(pensionBase * RATES.pension) : 0;
     var health = floor10(m * RATES.health);
     var care = floor10(health * RATES.longTermCare);
-    var employment = floor10(m * RATES.employment);
+    var employment = noEmploymentInsurance ? 0 : floor10(m * RATES.employment);
     var annual = m * 12;
     var taxBase = annual - earnedIncomeDeduction(annual) - 1500000 - (pension + health + care + employment) * 12;
     var computed = progressiveTax(Math.max(0, taxBase));
@@ -86,7 +87,7 @@
     var holidayPay = Math.round(hourly * (holiday * premium + holidayOver8 * (small ? 1 : 2)));
     var gross = basePay + overtimePay + nightPay + holidayPay;
 
-    var d = deductions(gross);
+    var d = deductions(gross, opts.noEmploymentInsurance);
     var dorm = Math.max(0, +opts.dormDeduction || 0);
     var net = gross - d.total - dorm;
     var rate = Math.max(0, +opts.exchangeRate || 0);
@@ -191,7 +192,33 @@
     };
   }
 
-  var api = { RATES: RATES, deductions: deductions, monthlyPay: monthlyPay,
+  var JOB_SEEK_DAYS = [ // [masa asuransi minimal (tahun), <50 tahun, ≥50 tahun/disabilitas]
+    [10, 240, 270], [5, 210, 240], [3, 180, 210], [1, 150, 180], [0, 120, 120]
+  ];
+
+  /* Tunjangan pengangguran (구직급여): 60% upah rata-rata harian, batas atas ₩68.100, batas bawah 80% upah minimum */
+  function unemployment(opts) {
+    var wages3m = Math.max(0, +opts.wages3m || 0);
+    var periodDays = Math.max(1, +opts.periodDays || 92);
+    var dailyHours = Math.min(8, Math.max(1, +opts.dailyHours || 8));
+    var insuredYears = Math.max(0, +opts.insuredYears || 0);
+    var avgDaily = wages3m / periodDays;
+    var min = RATES.minimumWage * 0.8 * dailyHours;
+    var raw = avgDaily * 0.6;
+    var daily = Math.round(Math.max(min, Math.min(raw, RATES.jobSeekMax)));
+    var row = JOB_SEEK_DAYS.filter(function (r) { return insuredYears >= r[0]; })[0];
+    var days = opts.over50 ? row[2] : row[1];
+    return {
+      averageDailyWage: Math.round(avgDaily),
+      dailyBenefit: daily,
+      cappedAt: raw > RATES.jobSeekMax ? 'max' : raw < min ? 'min' : null,
+      benefitDays: days,
+      monthlyBenefit: daily * 30,
+      totalBenefit: daily * days
+    };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

@@ -72,3 +72,18 @@ test('cuti tahunan: bulan pertama, 1 tahun 15 hari, 3 tahun 16 hari, maks 25', (
   assert.strictEqual(C.annualLeave({ startDate: '1990-01-01', baseDate: '2026-01-01' }).leaveDays, 25);
   assert.strictEqual(C.annualLeave({ startDate: '2024-01-01', baseDate: '2026-01-01', hourly: 12000, unusedDays: 5 }).leavePay, 480000);
 });
+
+test('tunjangan pengangguran: batas atas ₩68.100, batas bawah ₩66.048, hari', () => {
+  const hi = C.unemployment({ wages3m: 15000000, periodDays: 92, insuredYears: 5 });
+  assert.strictEqual(hi.dailyBenefit, 68100);
+  assert.strictEqual(hi.benefitDays, 210);
+  const lo = C.unemployment({ wages3m: 3000000, periodDays: 92, insuredYears: 0.5 });
+  assert.strictEqual(lo.dailyBenefit, 66048);
+  assert.strictEqual(lo.benefitDays, 120);
+  assert.strictEqual(C.unemployment({ wages3m: 9000000, insuredYears: 10, over50: true }).benefitDays, 270);
+});
+
+test('gaji: tanpa asuransi pengangguran tidak ada potongan 고용보험', () => {
+  assert.strictEqual(C.monthlyPay({ hourly: 10320, noEmploymentInsurance: true }).deductions.employment, 0);
+  assert.ok(C.monthlyPay({ hourly: 10320 }).deductions.employment > 0);
+});

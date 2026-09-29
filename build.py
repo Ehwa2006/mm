@@ -36,6 +36,14 @@ PAGES = [
      "Batas 3 kali pindah kerja, alasan yang diizinkan, batas wilayah, dan batas waktu 1 dan 3 bulan untuk pekerja EPS/E-9 di Korea."),
     ("upah-minimum", "Upah Minimum", "Upah Minimum Korea 2026: ₩10.320 per Jam, Tabel 2020–2026",
      "Upah minimum Korea 2026 adalah ₩10.320 per jam atau ₩2.156.880 per bulan. Tabel upah minimum 2020–2026 dan konversi ke Rupiah."),
+    ("tunjangan-pengangguran", "Tunjangan Pengangguran", "Kalkulator Tunjangan Pengangguran Korea (실업급여) untuk Pekerja E-9 2026",
+     "Hitung tunjangan pengangguran (구직급여) di Korea: maksimal ₩68.100 per hari, 120–270 hari. Syarat khusus pekerja E-9 dan cara mendaftar."),
+    ("kecelakaan-kerja", "Kecelakaan Kerja", "Kecelakaan Kerja di Korea (산재): Hak Pekerja Asing dan Cara Klaim",
+     "Semua pekerja asing di Korea dilindungi asuransi kecelakaan kerja (산재보험): biaya pengobatan, 70% upah selama tidak bisa kerja, dan cara klaim sendiri."),
+    ("asuransi-kesehatan", "Asuransi Kesehatan", "Asuransi Kesehatan Korea (건강보험) untuk Pekerja E-9 2026",
+     "Potongan asuransi kesehatan Korea 2026 (3,595%), manfaat, dan pengembalian premi saat pindah kerja atau pulang ke Indonesia."),
+    ("asuransi-khusus-eps", "4 Asuransi EPS", "4 Asuransi Khusus Pekerja EPS di Korea (외국인 전용보험)",
+     "Asuransi kepulangan, jaminan upah, biaya pulang, dan kecelakaan untuk pekerja E-9: siapa yang bayar, batas waktu daftar, dan cara klaim saat pulang."),
     ("tentang", "Tentang", f"Tentang {SITE_NAME}",
      f"Tentang {SITE_NAME}: kalkulator gratis dalam bahasa Indonesia untuk pekerja di Korea Selatan."),
     ("kebijakan-privasi", "Kebijakan Privasi", f"Kebijakan Privasi - {SITE_NAME}",
@@ -46,14 +54,19 @@ SRC = os.path.join(ROOT, "src")
 OUT = os.path.join(ROOT, "docs")
 
 
+# Halaman yang tampil di menu atas. Halaman lain ditautkan dari beranda.
+NAV = ("kalkulator-gaji", "pesangon", "pengembalian-pensiun", "tunjangan-pengangguran")
+
+
 def nav(current, depth):
     prefix = "../" * depth
     links = []
     for slug, name, *_ in PAGES:
-        if slug in ("", "kebijakan-privasi", "tentang"):
+        if slug not in NAV:
             continue
         cur = ' aria-current="page"' if slug == current else ""
         links.append(f'<a href="{prefix}{slug}/"{cur}>{name}</a>')
+    links.append(f'<a href="{prefix}">Semua</a>')
     return "\n    ".join(links)
 
 
