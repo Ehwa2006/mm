@@ -1,0 +1,42 @@
+<h1>Kalkulator Cuti Tahunan Korea (연차) 2026</h1>
+<p class="lead">Hitung berapa hari cuti tahunan berbayar yang Anda dapat, dan berapa uang pengganti untuk cuti yang tidak terpakai.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="start">Tanggal mulai kerja</label><input id="start" type="date" value="2024-03-04"></div>
+  <div><label for="base">Tanggal hari ini</label><input id="base" type="date" value="2026-09-30"></div>
+  <div><label for="hourly">Upah per jam (₩)</label><input id="hourly" inputmode="numeric" data-money value="10.320"></div>
+  <div><label for="unused">Cuti yang tidak terpakai (hari)</label><input id="unused" type="number" min="0" value="5"></div>
+</form>
+<div class="card result">
+  <p>Cuti tahunan tahun ini</p>
+  <p class="big" id="days">-</p>
+  <table>
+    <tr><td>Lama kerja</td><td id="tenure"></td></tr>
+    <tr><td>Uang pengganti cuti tidak terpakai (연차수당)</td><td id="pay"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Aturan cuti tahunan di Korea</h2>
+<ul>
+  <li>Tahun pertama: 1 hari untuk setiap bulan kerja penuh, maksimal 11 hari.</li>
+  <li>Setelah 1 tahun dengan kehadiran 80% atau lebih: 15 hari.</li>
+  <li>Setelah 3 tahun: bertambah 1 hari setiap 2 tahun, maksimal 25 hari.</li>
+  <li>Aturan ini hanya wajib di tempat kerja dengan 5 pekerja atau lebih.</li>
+</ul>
+<h2>Uang pengganti cuti (연차수당)</h2>
+<p>Cuti yang tidak dipakai dalam 1 tahun biasanya dibayar dengan uang: upah per jam × 8 jam × jumlah hari yang tersisa. Jika majikan sudah menjalankan prosedur resmi untuk mendorong pemakaian cuti (연차 사용 촉진), kewajiban membayar ini bisa hilang.</p>
+<h2>Pertanyaan umum</h2>
+<p><strong>Bisakah saya pakai cuti untuk pulang ke Indonesia?</strong><br>Bisa, tetapi tanggalnya perlu disepakati dengan majikan. Banyak pekerja menggabungkan cuti tahunan dengan libur Lebaran atau Chuseok.</p>
+<p><strong>Saat pulang atau pindah kerja, cuti yang tersisa bagaimana?</strong><br>Cuti yang belum dipakai saat hubungan kerja berakhir harus dibayar dengan uang bersama gaji terakhir.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    if (!start.value || !base.value) return;
+    var r = Calc.annualLeave({ startDate: start.value, baseDate: base.value, hourly: num(hourly), unusedDays: num(unused) });
+    days.textContent = r.leaveDays + ' hari';
+    tenure.textContent = r.yearsWorked + ' tahun ' + (r.monthsWorked % 12) + ' bulan';
+    pay.textContent = won(r.leavePay);
+  }
+  [start, base, hourly, unused].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

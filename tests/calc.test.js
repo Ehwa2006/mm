@@ -57,3 +57,18 @@ test('pengembalian pensiun: bunga positif', () => {
   assert.strictEqual(r.months, 36);
   assert.ok(r.interest > 0 && r.total === r.contributions + r.interest);
 });
+
+test('uang libur mingguan: 40 jam upah minimum = 8 jam', () => {
+  const r = C.weeklyHolidayPay({ hourly: 10320, weeklyHours: 40 });
+  assert.strictEqual(r.weeklyHolidayPay, 82560);
+  assert.strictEqual(C.weeklyHolidayPay({ hourly: 10000, weeklyHours: 20 }).weeklyHolidayPay, 40000);
+  assert.strictEqual(C.weeklyHolidayPay({ hourly: 10000, weeklyHours: 14 }).eligible, false);
+});
+
+test('cuti tahunan: bulan pertama, 1 tahun 15 hari, 3 tahun 16 hari, maks 25', () => {
+  assert.strictEqual(C.annualLeave({ startDate: '2026-01-01', baseDate: '2026-07-15' }).leaveDays, 6);
+  assert.strictEqual(C.annualLeave({ startDate: '2025-01-01', baseDate: '2026-01-01' }).leaveDays, 15);
+  assert.strictEqual(C.annualLeave({ startDate: '2023-01-01', baseDate: '2026-01-01' }).leaveDays, 16);
+  assert.strictEqual(C.annualLeave({ startDate: '1990-01-01', baseDate: '2026-01-01' }).leaveDays, 25);
+  assert.strictEqual(C.annualLeave({ startDate: '2024-01-01', baseDate: '2026-01-01', hourly: 12000, unusedDays: 5 }).leavePay, 480000);
+});

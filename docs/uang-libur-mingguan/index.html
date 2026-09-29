@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator Uang Libur Mingguan Korea (주휴수당) 2026</title>
+<meta name="description" content="Hitung uang libur mingguan (주휴수당) di Korea: syarat 15 jam per minggu, rumus, dan contoh dengan upah minimum 2026.">
+<link rel="canonical" href="https://hitunggajikorea.com/uang-libur-mingguan/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kalkulator Uang Libur Mingguan Korea (주휴수당) 2026">
+<meta property="og:description" content="Hitung uang libur mingguan (주휴수당) di Korea: syarat 15 jam per minggu, rumus, dan contoh dengan upah minimum 2026.">
+<meta property="og:url" content="https://hitunggajikorea.com/uang-libur-mingguan/">
+<meta property="og:site_name" content="Hitung Gaji Korea">
+<meta property="og:locale" content="id_ID">
+<link rel="stylesheet" href="../assets/style.css">
+<meta name="google-site-verification" content="6QZrg8arA0qcFsJjTlA1p7b6IiLDwgyLGydh9rirqkQ">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9801504493505676" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+  <a class="logo" href="../">Hitung Gaji Korea</a>
+  <nav>
+    <a href="../kalkulator-gaji/">Gaji Bersih</a>
+    <a href="../pesangon/">Pesangon</a>
+    <a href="../pengembalian-pensiun/">Pengembalian Pensiun</a>
+    <a href="../uang-libur-mingguan/" aria-current="page">Uang Libur Mingguan</a>
+    <a href="../cuti-tahunan/">Cuti Tahunan</a>
+    <a href="../pindah-kerja/">Pindah Kerja</a>
+    <a href="../upah-minimum/">Upah Minimum</a>
+  </nav>
+</header>
+<main>
+<h1>Kalkulator Uang Libur Mingguan Korea (주휴수당) 2026</h1>
+<p class="lead">Pekerja yang bekerja 15 jam atau lebih per minggu berhak atas satu hari libur berbayar setiap minggu. Hitung berapa uangnya.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="hourly">Upah per jam (₩)</label><input id="hourly" inputmode="numeric" data-money value="10.320"><div class="hint">Upah minimum 2026: ₩10.320</div></div>
+  <div><label for="hours">Jam kerja per minggu (menurut kontrak)</label><input id="hours" type="number" min="0" step="0.5" value="40"></div>
+</form>
+<div class="card result">
+  <p>Uang libur mingguan (1 minggu)</p>
+  <p class="big" id="pay">-</p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Jam libur berbayar</td><td id="hh"></td></tr>
+    <tr><td>Rata-rata per bulan</td><td id="month"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Syarat mendapat 주휴수당</h2>
+<ul>
+  <li>Jam kerja menurut kontrak minimal 15 jam per minggu.</li>
+  <li>Masuk kerja penuh pada semua hari kerja minggu itu (tidak bolos).</li>
+  <li>Berlaku untuk semua pekerja, termasuk pekerja asing E-9 dan pekerja paruh waktu.</li>
+</ul>
+<h2>Rumus</h2>
+<p>Uang libur mingguan = (jam kerja per minggu ÷ 40) × 8 jam × upah per jam. Jika bekerja 40 jam atau lebih, dihitung 8 jam.</p>
+<p>Contoh: kerja 20 jam per minggu dengan upah ₩10.320 → (20 ÷ 40) × 8 × ₩10.320 = ₩41.280 per minggu.</p>
+<h2>Pertanyaan umum</h2>
+<p><strong>Apakah 주휴수당 sudah termasuk di gaji bulanan saya?</strong><br>Untuk pekerja penuh waktu dengan gaji bulanan, ya. Angka 209 jam per bulan sudah termasuk jam libur berbayar. Karena itu gaji minimum per bulan adalah ₩10.320 × 209 = ₩2.156.880. Untuk pekerja per jam atau paruh waktu, periksa apakah tertulis terpisah di slip gaji.</p>
+<p><strong>Majikan tidak membayar 주휴수당, apa yang harus dilakukan?</strong><br>Ini termasuk upah yang tidak dibayar (임금체불). Anda bisa melapor ke kantor ketenagakerjaan (고용노동부) di nomor 1350 dengan penerjemah.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.weeklyHolidayPay({ hourly: num(hourly), weeklyHours: num(hours) });
+    pay.textContent = won(r.weeklyHolidayPay);
+    msg.innerHTML = !r.eligible ? '<span class="warn">Kurang dari 15 jam per minggu, tidak ada uang libur mingguan.</span>'
+      : r.belowMinimum ? '<span class="warn">Upah per jam di bawah upah minimum 2026 (₩10.320).</span>' : '';
+    hh.textContent = r.holidayHours + ' jam';
+    month.textContent = won(r.monthlyHolidayPay);
+  }
+  hourly.addEventListener('input', run); hours.addEventListener('input', run);
+  run();
+});
+</script>
+
+</main>
+<footer>
+  <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Berdasarkan aturan Korea tahun 2026.</p>
+  <p><a href="../tentang/">Tentang</a> · <a href="../kebijakan-privasi/">Kebijakan Privasi</a> · &copy; 2026 Hitung Gaji Korea</p>
+</footer>
+<script src="../assets/calc.js"></script>
+<script src="../assets/ui.js"></script>
+</body>
+</html>

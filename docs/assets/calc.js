@@ -156,8 +156,44 @@
     };
   }
 
+  /* Uang libur mingguan (주휴수당): kerja ≥15 jam/minggu → (jam/40 × 8 jam) × upah per jam */
+  function weeklyHolidayPay(opts) {
+    var hourly = Math.max(0, +opts.hourly || 0);
+    var hours = Math.max(0, +opts.weeklyHours || 0);
+    var eligible = hours >= 15;
+    var holidayHours = eligible ? Math.min(hours, 40) / 40 * 8 : 0;
+    var weeklyPay = Math.round(holidayHours * hourly);
+    return {
+      eligible: eligible,
+      holidayHours: Math.round(holidayHours * 100) / 100,
+      weeklyHolidayPay: weeklyPay,
+      monthlyHolidayPay: Math.round(weeklyPay * 365 / 7 / 12),
+      belowMinimum: hourly > 0 && hourly < RATES.minimumWage
+    };
+  }
+
+  /* Cuti tahunan (연차): <1 tahun 1 hari per bulan (maks 11), lalu 15 hari + 1 per 2 tahun (maks 25) */
+  function annualLeave(opts) {
+    var start = parseDate(opts.startDate);
+    var on = parseDate(opts.baseDate);
+    var months = (on.getUTCFullYear() - start.getUTCFullYear()) * 12 + on.getUTCMonth() - start.getUTCMonth();
+    if (on.getUTCDate() < start.getUTCDate()) months--;
+    months = Math.max(0, months);
+    var years = Math.floor(months / 12);
+    var days = years < 1 ? Math.min(months, 11) : Math.min(15 + Math.floor((years - 1) / 2), 25);
+    var hourly = Math.max(0, +opts.hourly || 0);
+    var unused = Math.max(0, +opts.unusedDays || 0);
+    return {
+      yearsWorked: years,
+      monthsWorked: months,
+      leaveDays: days,
+      leavePay: Math.round(hourly * 8 * unused)
+    };
+  }
+
   var api = { RATES: RATES, deductions: deductions, monthlyPay: monthlyPay,
-    severance: severance, pensionRefund: pensionRefund };
+    severance: severance, pensionRefund: pensionRefund,
+    weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Calc = api;
 })(this);

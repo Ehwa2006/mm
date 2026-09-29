@@ -28,6 +28,16 @@ PAGES = [
      "Hitung perkiraan pesangon (퇴직금) di Korea dan berapa yang dibayar asuransi kepulangan (출국만기보험) serta selisih dari majikan."),
     ("pengembalian-pensiun", "Pengembalian Pensiun", "Kalkulator Pengembalian Pensiun Korea (반환일시금) untuk TKI",
      "Perkirakan uang pensiun nasional Korea (국민연금) yang bisa diklaim kembali saat pulang ke Indonesia, termasuk iuran majikan dan bunga."),
+    ("uang-libur-mingguan", "Uang Libur Mingguan", "Kalkulator Uang Libur Mingguan Korea (주휴수당) 2026",
+     "Hitung uang libur mingguan (주휴수당) di Korea: syarat 15 jam per minggu, rumus, dan contoh dengan upah minimum 2026."),
+    ("cuti-tahunan", "Cuti Tahunan", "Kalkulator Cuti Tahunan Korea (연차) dan Uang Pengganti Cuti",
+     "Hitung jumlah hari cuti tahunan berbayar di Korea (maksimal 25 hari) dan uang pengganti cuti yang tidak terpakai (연차수당)."),
+    ("pindah-kerja", "Pindah Kerja", "Aturan Pindah Tempat Kerja E-9 di Korea (사업장 변경) 2026",
+     "Batas 3 kali pindah kerja, alasan yang diizinkan, batas wilayah, dan batas waktu 1 dan 3 bulan untuk pekerja EPS/E-9 di Korea."),
+    ("upah-minimum", "Upah Minimum", "Upah Minimum Korea 2026: ₩10.320 per Jam, Tabel 2020–2026",
+     "Upah minimum Korea 2026 adalah ₩10.320 per jam atau ₩2.156.880 per bulan. Tabel upah minimum 2020–2026 dan konversi ke Rupiah."),
+    ("tentang", "Tentang", f"Tentang {SITE_NAME}",
+     f"Tentang {SITE_NAME}: kalkulator gratis dalam bahasa Indonesia untuk pekerja di Korea Selatan."),
     ("kebijakan-privasi", "Kebijakan Privasi", f"Kebijakan Privasi - {SITE_NAME}",
      f"Kebijakan privasi {SITE_NAME}."),
 ]
@@ -40,7 +50,7 @@ def nav(current, depth):
     prefix = "../" * depth
     links = []
     for slug, name, *_ in PAGES:
-        if slug in ("", "kebijakan-privasi"):
+        if slug in ("", "kebijakan-privasi", "tentang"):
             continue
         cur = ' aria-current="page"' if slug == current else ""
         links.append(f'<a href="{prefix}{slug}/"{cur}>{name}</a>')
@@ -87,7 +97,7 @@ def render(slug, title, desc, body):
 </main>
 <footer>
   <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Berdasarkan aturan Korea tahun 2026.</p>
-  <p><a href="{prefix}kebijakan-privasi/">Kebijakan Privasi</a> · &copy; {date.today().year} {SITE_NAME}</p>
+  <p><a href="{prefix}tentang/">Tentang</a> · <a href="{prefix}kebijakan-privasi/">Kebijakan Privasi</a> · &copy; {date.today().year} {SITE_NAME}</p>
 </footer>
 <script src="{prefix}assets/calc.js"></script>
 <script src="{prefix}assets/ui.js"></script>

@@ -34,7 +34,7 @@ td { padding: 6px 0; border-bottom: 1px solid var(--border); }
 td:last-child { text-align: right; }
 .warn { color: var(--warn); font-weight: 600; }
 .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-.tools a { display: block; text-decoration: none; color: var(--text); }
+.tools a { display: block; text-decoration: none; color: var(--text); margin: 0; }
 .tools a strong { color: var(--accent); }
 .ad-slot:empty { display: none; }
 .ad-slot { margin: 16px 0; min-height: 90px; }
