@@ -1,0 +1,45 @@
+<h1>Kalkulator Upah Kerja di Hari Libur Nasional Korea (Seollal, Chuseok, dll.)</h1>
+<p class="lead">Sejak 2022, hari libur nasional Korea seperti Seollal dan Chuseok adalah hari libur berbayar di semua tempat kerja dengan 5 pekerja atau lebih, termasuk untuk pekerja asing. Jika Anda tetap bekerja, upahnya harus lebih besar.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="hourly">Upah per jam (₩)</label><input id="hourly" inputmode="numeric" data-money value="10.320"></div>
+  <div><label for="hours">Jam kerja di hari libur itu</label><input id="hours" type="number" min="0" step="0.5" value="8"></div>
+  <div><label for="type">Cara dibayar</label>
+    <select id="type"><option value="monthly">Gaji bulanan (월급제)</option><option value="hourly">Per jam / per hari (시급·일급제)</option></select></div>
+  <div class="check"><input id="small" type="checkbox"><label for="small">Tempat kerja kurang dari 5 pekerja</label></div>
+</form>
+<div class="card result">
+  <p>Upah untuk hari libur itu</p>
+  <p class="big" id="total">-</p>
+  <table>
+    <tr><td>Upah hari libur berbayar</td><td id="paid"></td></tr>
+    <tr><td>Upah kerja di hari libur</td><td id="work"></td></tr>
+  </table>
+  <p id="msg" class="hint"></p>
+</div>
+<div class="ad-slot"></div>
+<h2>Aturannya</h2>
+<ul>
+  <li><strong>Hari libur nasional = libur berbayar.</strong> Di tempat kerja dengan 5 pekerja atau lebih, hari libur nasional (관공서 공휴일) dan hari libur pengganti (대체공휴일) adalah hari libur dengan upah, sejak 1 Januari 2022.</li>
+  <li><strong>Jika tetap bekerja</strong>, majikan wajib membayar tambahan minimal 50% untuk 8 jam pertama dan 100% untuk jam di atas 8 jam.</li>
+  <li><strong>Pekerja gaji bulanan</strong>: upah hari libur sudah termasuk di gaji bulanan, jadi tambahan yang dibayar adalah upah kerja 150%.</li>
+  <li><strong>Pekerja per jam atau per hari</strong>: berhak atas upah hari libur (1 hari kerja biasa) ditambah upah kerja 150%. Totalnya sekitar 2,5 kali upah biasa untuk 8 jam.</li>
+  <li><strong>Hari pengganti</strong>: majikan boleh menukar hari libur dengan hari kerja lain hanya jika ada persetujuan tertulis dengan perwakilan pekerja. Jika ditukar dengan benar, kerja di hari libur itu dihitung sebagai hari biasa.</li>
+</ul>
+<h2>Hari libur nasional Korea</h2>
+<p>Tahun Baru (1 Januari), Seollal (3 hari), Hari Gerakan Kemerdekaan (1 Maret), Hari Anak (5 Mei), Hari Buddha, Hari Peringatan (6 Juni), Hari Kemerdekaan (15 Agustus), Chuseok (3 hari), Hari Pendirian Negara (3 Oktober), Hari Hangeul (9 Oktober), dan Natal (25 Desember), ditambah hari libur pengganti dan hari pemilu. Idulfitri dan Iduladha bukan hari libur nasional Korea, jadi cuti Lebaran biasanya memakai <a href="{{prefix}}cuti-tahunan/">cuti tahunan</a>.</p>
+<h2>Pertanyaan umum</h2>
+<p><strong>Saya bekerja saat Chuseok tetapi slip gaji tidak menunjukkan tambahan, apakah benar?</strong><br>Jika tempat kerja Anda 5 pekerja atau lebih dan tidak ada penukaran hari libur yang sah, Anda berhak atas tambahan upah kerja hari libur. Cek <a href="{{prefix}}slip-gaji/">slip gaji</a> pada baris 휴일근로수당. Jika tidak dibayar, lihat <a href="{{prefix}}gaji-tidak-dibayar/">cara melapor</a>.</p>
+<p><strong>Apakah hari Minggu juga hari libur nasional?</strong><br>Hari Minggu bukan hari libur nasional dalam aturan ini. Hari libur mingguan diatur terpisah lewat <a href="{{prefix}}uang-libur-mingguan/">uang libur mingguan</a>.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.publicHolidayPay({ hourly: num(hourly), hours: num(hours), monthlySalaried: type.value === 'monthly', smallWorkplace: small.checked });
+    total.textContent = won(r.total);
+    paid.textContent = type.value === 'monthly' && !small.checked ? 'sudah termasuk gaji bulanan' : won(r.paidHoliday);
+    work.textContent = won(r.workPay);
+    msg.textContent = small.checked ? 'Tempat kerja kurang dari 5 pekerja tidak wajib memberi libur berbayar atau tambahan 50%.' : '';
+  }
+  [hourly, hours, type, small].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

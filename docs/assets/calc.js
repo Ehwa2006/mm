@@ -248,7 +248,20 @@
     };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
+  /* Kerja di hari libur nasional (관공서 공휴일): tempat kerja ≥5 pekerja wajib memberi libur berbayar.
+     Jika tetap bekerja: upah libur (100%, kecuali pekerja bulanan yang sudah termasuk gaji) + upah kerja 150% (≤8 jam) / 200% (>8 jam). */
+  function publicHolidayPay(opts) {
+    var hourly = Math.max(0, +opts.hourly || 0);
+    var hours = Math.max(0, +opts.hours || 0);
+    var dailyHours = Math.max(0, opts.dailyHours == null ? 8 : +opts.dailyHours);
+    var small = !!opts.smallWorkplace;
+    var paidHoliday = small || opts.monthlySalaried ? 0 : Math.round(hourly * dailyHours);
+    var workPay = small ? Math.round(hourly * hours)
+      : Math.round(hourly * (Math.min(hours, 8) * 1.5 + Math.max(hours - 8, 0) * 2));
+    return { paidHoliday: paidHoliday, workPay: workPay, total: paidHoliday + workPay };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

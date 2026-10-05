@@ -108,3 +108,14 @@ test('tabungan: sisa bulanan × bulan + pesangon + pensiun', () => {
   assert.strictEqual(r.totalRupiah, Math.round(r.total * 11.5));
   assert.strictEqual(C.savings({ monthlyNet: 2500000, months: 11, monthlyGross: 3000000 }).severance, 0);
 });
+
+test('hari libur nasional: upah libur + 150%/200%, pekerja bulanan, <5 pekerja', () => {
+  const r = C.publicHolidayPay({ hourly: 10000, hours: 10 });
+  assert.strictEqual(r.paidHoliday, 80000);
+  assert.strictEqual(r.workPay, 8 * 15000 + 2 * 20000);
+  assert.strictEqual(r.total, 80000 + 160000);
+  assert.strictEqual(C.publicHolidayPay({ hourly: 10000, hours: 8, monthlySalaried: true }).total, 120000);
+  const s = C.publicHolidayPay({ hourly: 10000, hours: 8, smallWorkplace: true });
+  assert.strictEqual(s.paidHoliday, 0);
+  assert.strictEqual(s.workPay, 80000);
+});

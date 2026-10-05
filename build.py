@@ -41,14 +41,16 @@ PAGES = [
      "Hitung uang libur mingguan (주휴수당) di Korea: syarat 15 jam per minggu, rumus, dan contoh dengan upah minimum 2026."),
     ("cuti-tahunan", "kalkulator", "Cuti Tahunan", "Kalkulator Cuti Tahunan Korea (연차) dan Uang Pengganti Cuti",
      "Hitung jumlah hari cuti tahunan berbayar di Korea (maksimal 25 hari) dan uang pengganti cuti yang tidak terpakai (연차수당)."),
+    ("libur-nasional", "kalkulator", "Libur Nasional", "Kalkulator Upah Kerja di Hari Libur Nasional Korea (Seollal, Chuseok) 2026",
+     "Hitung upah jika bekerja saat Seollal, Chuseok, atau hari libur nasional Korea: upah libur berbayar ditambah 150%–200% untuk tempat kerja 5 pekerja atau lebih."),
     ("tunjangan-pengangguran", "kalkulator", "Tunjangan Pengangguran", "Kalkulator Tunjangan Pengangguran Korea (실업급여) untuk Pekerja E-9 2026",
      "Hitung tunjangan pengangguran (구직급여) di Korea: maksimal ₩68.100 per hari, 120–270 hari. Syarat khusus pekerja E-9 dan cara mendaftar."),
     ("potongan-asrama", "kalkulator", "Potongan Asrama", "Batas Potongan Asrama dan Makan Pekerja Asing di Korea (숙식비 공제) - Kalkulator",
      "Majikan hanya boleh memotong biaya asrama dan makan 8–20% dari upah normal. Cek apakah potongan di slip gaji Anda melebihi batas."),
     ("slip-gaji", "panduan", "Membaca Slip Gaji", "Cara Membaca Slip Gaji Korea (임금명세서) untuk Pekerja Indonesia",
      "Arti setiap baris di slip gaji Korea: gaji pokok, lembur, uang libur, potongan asuransi dan pajak. Daftar hal yang harus dicek setiap bulan."),
-    ("upah-minimum", "panduan", "Upah Minimum", "Upah Minimum Korea 2026: ₩10.320 per Jam, Tabel 2020–2026",
-     "Upah minimum Korea 2026 adalah ₩10.320 per jam atau ₩2.156.880 per bulan. Tabel upah minimum 2020–2026 dan konversi ke Rupiah."),
+    ("upah-minimum", "panduan", "Upah Minimum", "Upah Minimum Korea 2026 (₩10.320) dan 2027 (₩10.700): Tabel 2020–2027",
+     "Upah minimum Korea 2026 adalah ₩10.320 per jam (₩2.156.880 per bulan) dan naik menjadi ₩10.700 mulai 2027. Tabel 2020–2027 dan konversi ke Rupiah."),
     ("pindah-kerja", "panduan", "Pindah Kerja", "Aturan Pindah Tempat Kerja E-9 di Korea (사업장 변경) 2026",
      "Batas 3 kali pindah kerja, alasan yang diizinkan, batas wilayah, dan batas waktu 1 dan 3 bulan untuk pekerja EPS/E-9 di Korea."),
     ("gaji-tidak-dibayar", "panduan", "Gaji Tidak Dibayar", "Gaji Tidak Dibayar di Korea (임금체불): Cara Melapor untuk Pekerja Asing",
@@ -95,6 +97,7 @@ SOURCES = {
     ],
     "pengembalian-pensiun": [
         ("National Pension Service: panduan untuk orang asing (PDF)", "https://www.nps.or.kr/html/download/guide_for_foreigners_3.pdf"),
+        ("National Pension Service: pengembalian sekaligus (반환일시금)", "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0079M0.do"),
     ],
     "kalkulator-tabungan": [
         ("National Pension Service: panduan untuk orang asing (PDF)", "https://www.nps.or.kr/html/download/guide_for_foreigners_3.pdf"),
@@ -104,6 +107,10 @@ SOURCES = {
     ],
     "cuti-tahunan": [
         ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 60–61", "https://www.law.go.kr/법령/근로기준법"),
+    ],
+    "libur-nasional": [
+        ("Kementerian Ketenagakerjaan: perluasan libur berbayar hari libur nasional", "https://www.moel.go.kr/policy/policydata/view.do?bbs_seq=20211200972"),
+        ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 55 dan 56", "https://www.law.go.kr/법령/근로기준법"),
     ],
     "tunjangan-pengangguran": [
         ("Kementerian Ketenagakerjaan: asuransi ketenagakerjaan untuk pekerja E-9/H-2", "https://www.moel.go.kr/local/tongyeong/news/notice/noticeView.do?bbs_seq=20201200983"),
