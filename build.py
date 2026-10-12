@@ -37,6 +37,8 @@ PAGES = [
      "Perkirakan uang pensiun nasional Korea (국민연금) yang bisa diklaim kembali saat pulang ke Indonesia, termasuk iuran majikan dan bunga."),
     ("kalkulator-tabungan", "kalkulator", "Tabungan", "Kalkulator Tabungan Kerja di Korea: Berapa Uang yang Dibawa Pulang?",
      "Hitung perkiraan tabungan selama kerja di Korea 1 tahun, 3 tahun, atau 4 tahun 10 bulan, termasuk pesangon dan pengembalian pensiun, dalam Won dan Rupiah."),
+    ("kalkulator-shift", "kalkulator", "Kerja Shift", "Kalkulator Gaji Kerja Shift Korea (2 Shift / 3 Shift): Lembur dan Jam Malam",
+     "Hitung jam lembur, jam malam (22.00–06.00), dan gaji kotor per bulan untuk kerja shift siang-malam di pabrik Korea. Contoh shift 20.00–08.00."),
     ("uang-libur-mingguan", "kalkulator", "Uang Libur Mingguan", "Kalkulator Uang Libur Mingguan Korea (주휴수당) 2026",
      "Hitung uang libur mingguan (주휴수당) di Korea: syarat 15 jam per minggu, rumus, dan contoh dengan upah minimum 2026."),
     ("cuti-tahunan", "kalkulator", "Cuti Tahunan", "Kalkulator Cuti Tahunan Korea (연차) dan Uang Pengganti Cuti",
@@ -101,6 +103,9 @@ SOURCES = {
     ],
     "kalkulator-tabungan": [
         ("National Pension Service: panduan untuk orang asing (PDF)", "https://www.nps.or.kr/html/download/guide_for_foreigners_3.pdf"),
+    ],
+    "kalkulator-shift": [
+        ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 50, 53, 56", "https://www.law.go.kr/법령/근로기준법"),
     ],
     "uang-libur-mingguan": [
         ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 55", "https://www.law.go.kr/법령/근로기준법"),

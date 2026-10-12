@@ -1,0 +1,56 @@
+<h1>Kalkulator Gaji Kerja Shift di Korea (2 Shift / 3 Shift, 주야 교대)</h1>
+<p class="lead">Banyak pabrik di Korea memakai sistem shift siang-malam. Masukkan jam mulai dan selesai shift Anda untuk menghitung jam lembur, jam malam, dan perkiraan gaji kotor per bulan.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="hourly">Upah per jam (₩)</label><input id="hourly" inputmode="numeric" data-money value="10.320"></div>
+  <div><label for="start">Jam mulai shift</label><input id="start" type="time" value="20:00"></div>
+  <div><label for="end">Jam selesai shift</label><input id="end" type="time" value="08:00"></div>
+  <div><label for="brk">Jam istirahat per shift</label><input id="brk" type="number" min="0" step="0.5" value="1"></div>
+  <div><label for="nbrk">…dari itu, istirahat di antara 22.00–06.00</label><input id="nbrk" type="number" min="0" step="0.5" value="1"></div>
+  <div><label for="days">Hari kerja per minggu</label><input id="days" type="number" min="1" max="7" value="5"></div>
+</form>
+<div class="card result">
+  <p>Perkiraan gaji kotor per bulan</p>
+  <p class="big" id="gross">-</p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Jam kerja per shift</td><td id="dw"></td></tr>
+    <tr><td>Jam malam per shift (22.00–06.00)</td><td id="dn"></td></tr>
+    <tr><td>Jam kerja per minggu</td><td id="wk"></td></tr>
+    <tr><td>Jam lembur per bulan</td><td id="otm"></td></tr>
+    <tr><td>Jam malam per bulan</td><td id="nm"></td></tr>
+    <tr><td>Gaji pokok (209 jam)</td><td id="base"></td></tr>
+    <tr><td>Upah lembur (× 1,5)</td><td id="otp"></td></tr>
+    <tr><td>Tambahan malam (× 0,5)</td><td id="np"></td></tr>
+  </table>
+  <p class="hint">Untuk gaji bersih setelah pajak dan asuransi, masukkan jam lembur dan jam malam per bulan ke <a href="{{prefix}}kalkulator-gaji/">kalkulator gaji bersih</a>.</p>
+</div>
+<div class="ad-slot"></div>
+<h2>Cara menghitung</h2>
+<ul>
+  <li><strong>Jam kerja</strong> = lama shift dikurangi istirahat. Istirahat tidak dibayar.</li>
+  <li><strong>Lembur</strong> = jam di atas 8 jam per hari, ditambah jam di atas 40 jam per minggu yang belum terhitung. Dibayar minimal 1,5 kali.</li>
+  <li><strong>Jam malam</strong> = jam kerja di antara 22.00 dan 06.00. Mendapat tambahan 0,5 kali, <em>di samping</em> upah lembur. Jadi jam lembur yang jatuh di malam hari dibayar 2 kali.</li>
+  <li>Per bulan dihitung dengan rata-rata 4,345 minggu. Gaji pokok dihitung 209 jam (40 jam kerja biasa per minggu ditambah uang libur mingguan).</li>
+  <li>Aturan tambahan ini berlaku di tempat kerja dengan 5 pekerja atau lebih.</li>
+</ul>
+<h2>Contoh: shift malam 20.00–08.00</h2>
+<p>Istirahat 1 jam, 5 hari seminggu, upah ₩10.320. Jam kerja 11 jam per shift, jadi 3 jam lembur per hari (15 jam per minggu, sekitar 65 jam per bulan). Jam malam 7 jam per shift (sekitar 152 jam per bulan). Gaji kotor per bulan sekitar ₩3,95 juta sebelum potongan: gaji pokok ₩2.156.880, lembur ± ₩1.009.000, dan tambahan malam ± ₩785.000.</p>
+<h2>Pertanyaan umum</h2>
+<p><strong>Apakah ada batas jam kerja per minggu?</strong><br>Secara umum, batasnya 40 jam kerja biasa ditambah maksimal 12 jam lembur, yaitu 52 jam per minggu, untuk tempat kerja 5 pekerja atau lebih. Ada beberapa pengecualian untuk sektor tertentu. Kalkulator ini memberi tanda jika lembur Anda melebihi 12 jam per minggu.</p>
+<p><strong>Istirahat saya sering dipotong, apa yang harus dilakukan?</strong><br>Jika Anda tetap bekerja saat jam istirahat, waktu itu adalah jam kerja dan harus dibayar. Catat jam kerja Anda setiap hari sebagai bukti. Lihat <a href="{{prefix}}gaji-tidak-dibayar/">cara melapor gaji yang tidak dibayar</a>.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    if (!start.value || !end.value) return;
+    var r = Calc.shiftPay({ hourly: num(hourly), start: start.value, end: end.value, breakHours: num(brk), nightBreakHours: num(nbrk), daysPerWeek: num(days) });
+    gross.textContent = won(r.gross);
+    msg.innerHTML = r.overLimit ? '<span class="warn">Lembur lebih dari 12 jam per minggu (di atas batas umum 52 jam).</span>' : '';
+    dw.textContent = r.dailyWork + ' jam'; dn.textContent = r.dailyNight + ' jam';
+    wk.textContent = r.weeklyHours + ' jam'; otm.textContent = r.overtimeHoursMonth + ' jam';
+    nm.textContent = r.nightHoursMonth + ' jam';
+    base.textContent = won(r.basePay); otp.textContent = won(r.overtimePay); np.textContent = won(r.nightPay);
+  }
+  [hourly, start, end, brk, nbrk, days].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

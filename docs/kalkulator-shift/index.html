@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator Gaji Kerja Shift Korea (2 Shift / 3 Shift): Lembur dan Jam Malam</title>
+<meta name="description" content="Hitung jam lembur, jam malam (22.00–06.00), dan gaji kotor per bulan untuk kerja shift siang-malam di pabrik Korea. Contoh shift 20.00–08.00.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://hitunggajikorea.com/kalkulator-shift/">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<meta name="theme-color" content="#0b7a5b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kalkulator Gaji Kerja Shift Korea (2 Shift / 3 Shift): Lembur dan Jam Malam">
+<meta property="og:description" content="Hitung jam lembur, jam malam (22.00–06.00), dan gaji kotor per bulan untuk kerja shift siang-malam di pabrik Korea. Contoh shift 20.00–08.00.">
+<meta property="og:url" content="https://hitunggajikorea.com/kalkulator-shift/">
+<meta property="og:site_name" content="Hitung Gaji Korea">
+<meta property="og:locale" content="id_ID">
+<meta property="og:image" content="https://hitunggajikorea.com/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Hitung Gaji Korea", "item": "https://hitunggajikorea.com/"}, {"@type": "ListItem", "position": 2, "name": "Kerja Shift", "item": "https://hitunggajikorea.com/kalkulator-shift/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Kalkulator Gaji Kerja Shift Korea (2 Shift / 3 Shift): Lembur dan Jam Malam", "description": "Hitung jam lembur, jam malam (22.00–06.00), dan gaji kotor per bulan untuk kerja shift siang-malam di pabrik Korea. Contoh shift 20.00–08.00.", "url": "https://hitunggajikorea.com/kalkulator-shift/", "inLanguage": "id-ID", "dateModified": "2026-10-12", "isPartOf": {"@type": "WebSite", "name": "Hitung Gaji Korea", "url": "https://hitunggajikorea.com/"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Apakah ada batas jam kerja per minggu?", "acceptedAnswer": {"@type": "Answer", "text": "Secara umum, batasnya 40 jam kerja biasa ditambah maksimal 12 jam lembur, yaitu 52 jam per minggu, untuk tempat kerja 5 pekerja atau lebih. Ada beberapa pengecualian untuk sektor tertentu. Kalkulator ini memberi tanda jika lembur Anda melebihi 12 jam per minggu."}}, {"@type": "Question", "name": "Istirahat saya sering dipotong, apa yang harus dilakukan?", "acceptedAnswer": {"@type": "Answer", "text": "Jika Anda tetap bekerja saat jam istirahat, waktu itu adalah jam kerja dan harus dibayar. Catat jam kerja Anda setiap hari sebagai bukti. Lihat cara melapor gaji yang tidak dibayar."}}]}</script>
+<meta name="google-site-verification" content="6QZrg8arA0qcFsJjTlA1p7b6IiLDwgyLGydh9rirqkQ">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9801504493505676" crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+  <a class="logo" href="../"><img src="../assets/favicon.svg" alt="" width="24" height="24">Hitung Gaji Korea</a>
+  <nav>
+    <a href="../kalkulator-gaji/">Gaji Bersih</a>
+    <a href="../pesangon/">Pesangon</a>
+    <a href="../pengembalian-pensiun/">Pengembalian Pensiun</a>
+    <a href="../kalkulator-tabungan/">Tabungan</a>
+    <a href="../">Semua</a>
+  </nav>
+</header>
+<main>
+<nav class="crumb" aria-label="breadcrumb"><a href="../">Beranda</a> › <span>Kalkulator</span> › <span>Kerja Shift</span></nav>
+<h1>Kalkulator Gaji Kerja Shift di Korea (2 Shift / 3 Shift, 주야 교대)</h1>
+<p class="updated">Terakhir diperbarui: <time datetime="2026-10-12">12 Oktober 2026</time></p>
+<p class="lead">Banyak pabrik di Korea memakai sistem shift siang-malam. Masukkan jam mulai dan selesai shift Anda untuk menghitung jam lembur, jam malam, dan perkiraan gaji kotor per bulan.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="hourly">Upah per jam (₩)</label><input id="hourly" inputmode="numeric" data-money value="10.320"></div>
+  <div><label for="start">Jam mulai shift</label><input id="start" type="time" value="20:00"></div>
+  <div><label for="end">Jam selesai shift</label><input id="end" type="time" value="08:00"></div>
+  <div><label for="brk">Jam istirahat per shift</label><input id="brk" type="number" min="0" step="0.5" value="1"></div>
+  <div><label for="nbrk">…dari itu, istirahat di antara 22.00–06.00</label><input id="nbrk" type="number" min="0" step="0.5" value="1"></div>
+  <div><label for="days">Hari kerja per minggu</label><input id="days" type="number" min="1" max="7" value="5"></div>
+</form>
+<div class="card result">
+  <p>Perkiraan gaji kotor per bulan</p>
+  <p class="big" id="gross">-</p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Jam kerja per shift</td><td id="dw"></td></tr>
+    <tr><td>Jam malam per shift (22.00–06.00)</td><td id="dn"></td></tr>
+    <tr><td>Jam kerja per minggu</td><td id="wk"></td></tr>
+    <tr><td>Jam lembur per bulan</td><td id="otm"></td></tr>
+    <tr><td>Jam malam per bulan</td><td id="nm"></td></tr>
+    <tr><td>Gaji pokok (209 jam)</td><td id="base"></td></tr>
+    <tr><td>Upah lembur (× 1,5)</td><td id="otp"></td></tr>
+    <tr><td>Tambahan malam (× 0,5)</td><td id="np"></td></tr>
+  </table>
+  <p class="hint">Untuk gaji bersih setelah pajak dan asuransi, masukkan jam lembur dan jam malam per bulan ke <a href="../kalkulator-gaji/">kalkulator gaji bersih</a>.</p>
+</div>
+<div class="ad-slot"></div>
+<h2>Cara menghitung</h2>
+<ul>
+  <li><strong>Jam kerja</strong> = lama shift dikurangi istirahat. Istirahat tidak dibayar.</li>
+  <li><strong>Lembur</strong> = jam di atas 8 jam per hari, ditambah jam di atas 40 jam per minggu yang belum terhitung. Dibayar minimal 1,5 kali.</li>
+  <li><strong>Jam malam</strong> = jam kerja di antara 22.00 dan 06.00. Mendapat tambahan 0,5 kali, <em>di samping</em> upah lembur. Jadi jam lembur yang jatuh di malam hari dibayar 2 kali.</li>
+  <li>Per bulan dihitung dengan rata-rata 4,345 minggu. Gaji pokok dihitung 209 jam (40 jam kerja biasa per minggu ditambah uang libur mingguan).</li>
+  <li>Aturan tambahan ini berlaku di tempat kerja dengan 5 pekerja atau lebih.</li>
+</ul>
+<h2>Contoh: shift malam 20.00–08.00</h2>
+<p>Istirahat 1 jam, 5 hari seminggu, upah ₩10.320. Jam kerja 11 jam per shift, jadi 3 jam lembur per hari (15 jam per minggu, sekitar 65 jam per bulan). Jam malam 7 jam per shift (sekitar 152 jam per bulan). Gaji kotor per bulan sekitar ₩3,95 juta sebelum potongan: gaji pokok ₩2.156.880, lembur ± ₩1.009.000, dan tambahan malam ± ₩785.000.</p>
+<h2>Pertanyaan umum</h2>
+<p><strong>Apakah ada batas jam kerja per minggu?</strong><br>Secara umum, batasnya 40 jam kerja biasa ditambah maksimal 12 jam lembur, yaitu 52 jam per minggu, untuk tempat kerja 5 pekerja atau lebih. Ada beberapa pengecualian untuk sektor tertentu. Kalkulator ini memberi tanda jika lembur Anda melebihi 12 jam per minggu.</p>
+<p><strong>Istirahat saya sering dipotong, apa yang harus dilakukan?</strong><br>Jika Anda tetap bekerja saat jam istirahat, waktu itu adalah jam kerja dan harus dibayar. Catat jam kerja Anda setiap hari sebagai bukti. Lihat <a href="../gaji-tidak-dibayar/">cara melapor gaji yang tidak dibayar</a>.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    if (!start.value || !end.value) return;
+    var r = Calc.shiftPay({ hourly: num(hourly), start: start.value, end: end.value, breakHours: num(brk), nightBreakHours: num(nbrk), daysPerWeek: num(days) });
+    gross.textContent = won(r.gross);
+    msg.innerHTML = r.overLimit ? '<span class="warn">Lembur lebih dari 12 jam per minggu (di atas batas umum 52 jam).</span>' : '';
+    dw.textContent = r.dailyWork + ' jam'; dn.textContent = r.dailyNight + ' jam';
+    wk.textContent = r.weeklyHours + ' jam'; otm.textContent = r.overtimeHoursMonth + ' jam';
+    nm.textContent = r.nightHoursMonth + ' jam';
+    base.textContent = won(r.basePay); otp.textContent = won(r.overtimePay); np.textContent = won(r.nightPay);
+  }
+  [hourly, start, end, brk, nbrk, days].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>
+
+<div class="sources"><h2>Sumber resmi</h2><ul><li><a href="https://www.law.go.kr/법령/근로기준법" rel="nofollow noopener" target="_blank">Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 50, 53, 56</a></li></ul></div>
+<h2>Halaman terkait</h2>
+<div class="tools"><a class="card" href="../uang-libur-mingguan/"><strong>Uang Libur Mingguan</strong><br>Hitung uang libur mingguan (주휴수당) di Korea: syarat 15 jam per minggu, rumus, dan contoh dengan upah minimum 20…</a><a class="card" href="../cuti-tahunan/"><strong>Cuti Tahunan</strong><br>Hitung jumlah hari cuti tahunan berbayar di Korea (maksimal 25 hari) dan uang pengganti cuti yang tidak terpak…</a><a class="card" href="../libur-nasional/"><strong>Libur Nasional</strong><br>Hitung upah jika bekerja saat Seollal, Chuseok, atau hari libur nasional Korea: upah libur berbayar ditambah 1…</a><a class="card" href="../tunjangan-pengangguran/"><strong>Tunjangan Pengangguran</strong><br>Hitung tunjangan pengangguran (구직급여) di Korea: maksimal ₩68.100 per hari, 120–270 hari. Syarat khusus pekerja …</a></div>
+</main>
+<footer>
+  <div class="footer-cols">
+    <div><h3>Kalkulator</h3><ul><li><a href="../kalkulator-gaji/">Gaji Bersih</a></li><li><a href="../pesangon/">Pesangon</a></li><li><a href="../pengembalian-pensiun/">Pengembalian Pensiun</a></li><li><a href="../kalkulator-tabungan/">Tabungan</a></li><li><a href="../kalkulator-shift/">Kerja Shift</a></li><li><a href="../uang-libur-mingguan/">Uang Libur Mingguan</a></li><li><a href="../cuti-tahunan/">Cuti Tahunan</a></li><li><a href="../libur-nasional/">Libur Nasional</a></li><li><a href="../tunjangan-pengangguran/">Tunjangan Pengangguran</a></li><li><a href="../potongan-asrama/">Potongan Asrama</a></li></ul></div>
+    <div><h3>Panduan</h3><ul><li><a href="../slip-gaji/">Membaca Slip Gaji</a></li><li><a href="../upah-minimum/">Upah Minimum</a></li><li><a href="../pindah-kerja/">Pindah Kerja</a></li><li><a href="../gaji-tidak-dibayar/">Gaji Tidak Dibayar</a></li><li><a href="../kecelakaan-kerja/">Kecelakaan Kerja</a></li><li><a href="../asuransi-kesehatan/">Asuransi Kesehatan</a></li><li><a href="../asuransi-khusus-eps/">4 Asuransi EPS</a></li><li><a href="../pekerja-setia/">Pekerja Setia</a></li><li><a href="../alur-eps/">Alur EPS</a></li><li><a href="../kartu-arc/">Kartu ARC</a></li><li><a href="../perpanjangan-kerja/">Perpanjangan Kerja</a></li><li><a href="../aplikasi-penting/">Aplikasi Penting</a></li><li><a href="../nomor-penting/">Nomor Penting</a></li></ul></div>
+    <div><h3>Situs</h3><ul><li><a href="../tentang/">Tentang</a></li><li><a href="../kontak/">Kontak</a></li><li><a href="../syarat-ketentuan/">Syarat & Disclaimer</a></li><li><a href="../kebijakan-privasi/">Kebijakan Privasi</a></li></ul></div>
+  </div>
+  <p>Hasil perhitungan adalah perkiraan dan bisa berbeda dari slip gaji atau pembayaran resmi. Situs ini bukan situs resmi pemerintah Korea atau Indonesia. Berdasarkan aturan Korea tahun 2026.</p>
+  <p>&copy; 2026 Hitung Gaji Korea</p>
+</footer>
+<script src="../assets/calc.js"></script>
+<script src="../assets/ui.js"></script>
+</body>
+</html>

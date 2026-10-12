@@ -119,3 +119,23 @@ test('hari libur nasional: upah libur + 150%/200%, pekerja bulanan, <5 pekerja',
   assert.strictEqual(s.paidHoliday, 0);
   assert.strictEqual(s.workPay, 80000);
 });
+
+test('shift: jam malam melewati tengah malam dan jendela 22.00–06.00', () => {
+  // Shift malam 20.00–08.00, istirahat 1 jam (di jam malam), 5 hari
+  const r = C.shiftPay({ hourly: 10000, start: '20:00', end: '08:00', breakHours: 1, nightBreakHours: 1, daysPerWeek: 5 });
+  assert.strictEqual(r.dailyWork, 11);
+  assert.strictEqual(r.dailyNight, 7); // 22.00–06.00 = 8 jam, dikurangi istirahat 1 jam
+  assert.strictEqual(r.weeklyHours, 55);
+  const weeks = 365 / 7 / 12;
+  assert.strictEqual(r.overtimeHoursMonth, Math.round(15 * weeks * 10) / 10);
+  assert.strictEqual(r.basePay, 2090000);
+  assert.strictEqual(r.overLimit, true);
+});
+
+test('shift: siang 08.00–17.00 tanpa malam, lembur mingguan dari hari ke-6', () => {
+  const r = C.shiftPay({ hourly: 10000, start: '08:00', end: '17:00', breakHours: 1, daysPerWeek: 6 });
+  assert.strictEqual(r.dailyWork, 8);
+  assert.strictEqual(r.dailyNight, 0);
+  assert.strictEqual(r.overtimeHoursMonth, Math.round(8 * 365 / 7 / 12 * 10) / 10);
+  assert.strictEqual(r.overLimit, false);
+});

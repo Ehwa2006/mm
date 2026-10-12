@@ -261,7 +261,55 @@
     return { paidHoliday: paidHoliday, workPay: workPay, total: paidHoliday + workPay };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
+  function toMinutes(t) {
+    var p = String(t).split(':').map(Number);
+    return (p[0] || 0) * 60 + (p[1] || 0);
+  }
+
+  /* Menit kerja malam (22.00–06.00) di dalam satu shift; shift boleh melewati tengah malam. */
+  function nightMinutes(startMin, endMin) {
+    if (endMin <= startMin) endMin += 1440;
+    var total = 0;
+    // Jendela malam: 22.00–30.00 (06.00 hari berikutnya) dan 22.00 hari sebelumnya–06.00 hari ini.
+    [[-120, 360], [1320, 1800], [2760, 3240]].forEach(function (w) {
+      total += Math.max(0, Math.min(endMin, w[1]) - Math.max(startMin, w[0]));
+    });
+    return total;
+  }
+
+  /* Gaji shift (2/3 shift): lembur = jam di atas 8 per hari + di atas 40 per minggu; malam = 22.00–06.00. */
+  function shiftPay(opts) {
+    var hourly = Math.max(0, +opts.hourly || 0);
+    var days = Math.max(0, Math.min(7, +opts.daysPerWeek || 0));
+    var breakH = Math.max(0, +opts.breakHours || 0);
+    var nightBreakH = Math.max(0, Math.min(breakH, +opts.nightBreakHours || 0));
+    var s = toMinutes(opts.start), e = toMinutes(opts.end);
+    var span = (e <= s ? e + 1440 : e) - s;
+    var dailyWork = Math.max(0, span / 60 - breakH);
+    var dailyNight = Math.max(0, nightMinutes(s, e) / 60 - nightBreakH);
+    var weekly = dailyWork * days;
+    var dailyOver = Math.max(0, dailyWork - 8) * days;
+    var regular = Math.min(dailyWork, 8) * days;
+    var weeklyOver = Math.max(0, regular - 40);
+    var weeksPerMonth = 365 / 7 / 12;
+    var overtimeMonth = (dailyOver + weeklyOver) * weeksPerMonth;
+    var nightMonth = dailyNight * days * weeksPerMonth;
+    var base = Math.round(hourly * RATES.monthlyHours);
+    var overtimePay = Math.round(hourly * 1.5 * overtimeMonth);
+    var nightPay = Math.round(hourly * 0.5 * nightMonth);
+    return {
+      dailyWork: Math.round(dailyWork * 100) / 100,
+      dailyNight: Math.round(dailyNight * 100) / 100,
+      weeklyHours: Math.round(weekly * 100) / 100,
+      overtimeHoursMonth: Math.round(overtimeMonth * 10) / 10,
+      nightHoursMonth: Math.round(nightMonth * 10) / 10,
+      basePay: base, overtimePay: overtimePay, nightPay: nightPay,
+      gross: base + overtimePay + nightPay,
+      overLimit: dailyOver + weeklyOver > 12  // batas lembur 12 jam per minggu
+    };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
