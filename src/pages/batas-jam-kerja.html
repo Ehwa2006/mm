@@ -1,0 +1,50 @@
+<h1>Batas Jam Kerja di Korea: Maksimal 52 Jam per Minggu (주 52시간)</h1>
+<p class="lead">Di Korea, jam kerja dibatasi 40 jam biasa ditambah maksimal 12 jam lembur per minggu. Sejak 1 Januari 2025 aturan ini berlaku penuh untuk semua tempat kerja dengan 5 pekerja atau lebih, termasuk pabrik kecil.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="daily">Jam kerja per hari (tanpa istirahat)</label><input id="daily" type="number" min="0" max="24" step="0.5" value="10"></div>
+  <div><label for="days">Hari kerja per minggu</label><input id="days" type="number" min="1" max="7" value="6"></div>
+</form>
+<div class="card result">
+  <p>Jam kerja per minggu</p>
+  <p class="big" id="weekly">-</p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Jam lembur per minggu</td><td id="ot"></td></tr>
+    <tr><td>Batas lembur</td><td>12 jam</td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Aturan utama</h2>
+<table class="card">
+  <tr><td>Jam kerja biasa</td><td>8 jam per hari, 40 jam per minggu</td></tr>
+  <tr><td>Lembur</td><td>maksimal 12 jam per minggu, dengan persetujuan pekerja</td></tr>
+  <tr><td>Total</td><td>maksimal 52 jam per minggu</td></tr>
+  <tr><td>Istirahat</td><td>minimal 30 menit untuk 4 jam kerja, 1 jam untuk 8 jam kerja</td></tr>
+  <tr><td>Libur mingguan</td><td>minimal 1 hari berbayar per minggu (jika masuk penuh)</td></tr>
+</table>
+<h2>Hal penting</h2>
+<ul>
+  <li><strong>Lembur harus disetujui pekerja.</strong> Majikan tidak boleh memaksa lembur di atas yang disepakati.</li>
+  <li><strong>Semua lembur tetap harus dibayar</strong> minimal 1,5 kali, walaupun jamnya melebihi batas. Melanggar batas tidak menghapus hak upah Anda. Hitung di <a href="{{prefix}}kalkulator-gaji/">kalkulator gaji</a> atau <a href="{{prefix}}kalkulator-shift/">kalkulator shift</a>.</li>
+  <li>Aturan tambahan 8 jam untuk tempat kerja di bawah 30 pekerja sudah berakhir, dan masa transisinya selesai pada 31 Desember 2024.</li>
+  <li>Majikan yang melanggar bisa dihukum penjara sampai 2 tahun atau denda sampai ₩20 juta.</li>
+  <li>Ada pengecualian untuk beberapa sektor khusus, dan tempat kerja di bawah 5 pekerja tidak terkena batas ini.</li>
+</ul>
+<h2>Pertanyaan umum</h2>
+<p><strong>Saya ingin lembur lebih banyak supaya gaji besar, boleh?</strong><br>Batas 52 jam berlaku walaupun pekerja setuju. Majikan yang membiarkan lembur di atas batas melanggar hukum. Namun jika Anda sudah bekerja lebih dari batas, upah lembur untuk semua jam itu tetap wajib dibayar.</p>
+<p><strong>Bagaimana jika saya dipaksa bekerja lebih dari 52 jam?</strong><br>Catat jam kerja setiap hari sebagai bukti, lalu konsultasi ke Pusat Konsultasi Pekerja Asing di 1577-0071 (bahasa Indonesia) atau laporkan ke 1350. Kerja berlebihan yang melanggar hukum juga bisa menjadi alasan untuk <a href="{{prefix}}pindah-kerja/">pindah tempat kerja</a>.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.weeklyLimit({ dailyHours: num(daily), daysPerWeek: num(days) });
+    weekly.textContent = r.weekly + ' jam';
+    ot.textContent = r.overtime + ' jam';
+    var m = [];
+    if (r.overBy > 0) m.push('Melebihi batas lembur sebanyak ' + r.overBy + ' jam per minggu.');
+    if (r.noWeeklyRest) m.push('Tidak ada hari libur mingguan. Pekerja berhak minimal 1 hari libur per minggu.');
+    msg.innerHTML = m.length ? '<span class="warn">' + m.join(' ') + '</span>' : 'Masih dalam batas 52 jam per minggu.';
+  }
+  daily.addEventListener('input', run); days.addEventListener('input', run);
+  run();
+});
+</script>

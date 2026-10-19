@@ -309,7 +309,21 @@
     };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
+  /* Batas jam kerja: 40 jam biasa + maksimal 12 jam lembur per minggu (tempat kerja ≥5 pekerja). */
+  function weeklyLimit(opts) {
+    var daily = Math.max(0, +opts.dailyHours || 0);
+    var days = Math.max(0, Math.min(7, +opts.daysPerWeek || 0));
+    var weekly = daily * days;
+    var overtime = Math.max(0, daily - 8) * days + Math.max(0, Math.min(daily, 8) * days - 40);
+    return {
+      weekly: Math.round(weekly * 100) / 100,
+      overtime: Math.round(overtime * 100) / 100,
+      overBy: Math.round(Math.max(0, overtime - 12) * 100) / 100,
+      noWeeklyRest: days >= 7
+    };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

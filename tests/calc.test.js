@@ -139,3 +139,14 @@ test('shift: siang 08.00–17.00 tanpa malam, lembur mingguan dari hari ke-6', (
   assert.strictEqual(r.overtimeHoursMonth, Math.round(8 * 365 / 7 / 12 * 10) / 10);
   assert.strictEqual(r.overLimit, false);
 });
+
+test('batas jam kerja: 52 jam, lembur maks 12, hari libur mingguan', () => {
+  assert.deepStrictEqual(C.weeklyLimit({ dailyHours: 8, daysPerWeek: 5 }), { weekly: 40, overtime: 0, overBy: 0, noWeeklyRest: false });
+  const r = C.weeklyLimit({ dailyHours: 11, daysPerWeek: 5 });
+  assert.strictEqual(r.weekly, 55);
+  assert.strictEqual(r.overtime, 15);
+  assert.strictEqual(r.overBy, 3);
+  const s = C.weeklyLimit({ dailyHours: 8, daysPerWeek: 6 });
+  assert.strictEqual(s.overtime, 8);
+  assert.strictEqual(C.weeklyLimit({ dailyHours: 8, daysPerWeek: 7 }).noWeeklyRest, true);
+});

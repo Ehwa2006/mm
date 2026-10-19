@@ -51,6 +51,10 @@ PAGES = [
      "Majikan hanya boleh memotong biaya asrama dan makan 8–20% dari upah normal. Cek apakah potongan di slip gaji Anda melebihi batas."),
     ("slip-gaji", "panduan", "Membaca Slip Gaji", "Cara Membaca Slip Gaji Korea (임금명세서) untuk Pekerja Indonesia",
      "Arti setiap baris di slip gaji Korea: gaji pokok, lembur, uang libur, potongan asuransi dan pajak. Daftar hal yang harus dicek setiap bulan."),
+    ("batas-jam-kerja", "panduan", "Batas Jam Kerja", "Batas Jam Kerja Korea 52 Jam per Minggu (주 52시간): Aturan dan Cek Jam Anda",
+     "Jam kerja di Korea maksimal 40 jam + 12 jam lembur per minggu untuk tempat kerja 5 pekerja atau lebih, berlaku penuh sejak 2025. Cek jam kerja Anda."),
+    ("pajak-berhenti-kerja", "panduan", "Pajak Saat Berhenti", "Pajak Saat Berhenti Kerja atau Pulang dari Korea: Pengembalian Pajak (중도퇴사 연말정산)",
+     "Cara perhitungan ulang pajak saat berhenti kerja di tengah tahun, pengembalian pajak bersama gaji terakhir, tanggungan keluarga di Indonesia, dan batas 5 tahun."),
     ("upah-minimum", "panduan", "Upah Minimum", "Upah Minimum Korea 2026 (₩10.320) dan 2027 (₩10.700): Tabel 2020–2027",
      "Upah minimum Korea 2026 adalah ₩10.320 per jam (₩2.156.880 per bulan) dan naik menjadi ₩10.700 mulai 2027. Tabel 2020–2027 dan konversi ke Rupiah."),
     ("pindah-kerja", "panduan", "Pindah Kerja", "Aturan Pindah Tempat Kerja E-9 di Korea (사업장 변경) 2026",
@@ -127,6 +131,14 @@ SOURCES = {
     ],
     "slip-gaji": [
         ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 48", "https://www.law.go.kr/법령/근로기준법"),
+    ],
+    "batas-jam-kerja": [
+        ("Kementerian Ketenagakerjaan: berakhirnya masa transisi untuk tempat kerja di bawah 30 pekerja", "https://www.moel.go.kr/policy/policydata/view.do?bbs_seq=20241201955"),
+        ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 50, 53, 54", "https://www.law.go.kr/법령/근로기준법"),
+    ],
+    "pajak-berhenti-kerja": [
+        ("Korea Tax: perhitungan pajak untuk pekerja yang berhenti", "https://www.koreatax.org/tax/taxpayers/work/retiree_info_1.html"),
+        ("Hometax (국세청 홈택스)", "https://www.hometax.go.kr/"),
     ],
     "upah-minimum": [
         ("Komisi Upah Minimum Korea (최저임금위원회)", "https://www.minimumwage.go.kr/"),
