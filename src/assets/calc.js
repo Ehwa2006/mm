@@ -323,7 +323,27 @@
     };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
+  function addDays(d, n) { var x = new Date(d); x.setUTCDate(x.getUTCDate() + n); return x; }
+  function isoDate(d) { return d.toISOString().slice(0, 10); }
+
+  /* Cuti melahirkan (출산전후휴가): 90 hari (120 untuk kembar), minimal 45 hari (60 kembar) setelah melahirkan. */
+  function maternityLeave(opts) {
+    var start = parseDate(opts.startDate);
+    var birth = parseDate(opts.birthDate);
+    var total = opts.multiple ? 120 : 90;
+    var minAfter = opts.multiple ? 60 : 45;
+    var end = addDays(start, total - 1);
+    var afterBirth = daysBetween(birth, end) + 1;
+    var before = daysBetween(start, birth);
+    return {
+      totalDays: total, endDate: isoDate(end),
+      daysBeforeBirth: before, daysAfterBirth: afterBirth,
+      tooFewAfter: afterBirth < minAfter, minAfter: minAfter,
+      paidByEmployerDays: opts.multiple ? 75 : 60
+    };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, maternityLeave: maternityLeave, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

@@ -55,6 +55,8 @@ PAGES = [
      "Jam kerja di Korea maksimal 40 jam + 12 jam lembur per minggu untuk tempat kerja 5 pekerja atau lebih, berlaku penuh sejak 2025. Cek jam kerja Anda."),
     ("pajak-berhenti-kerja", "panduan", "Pajak Saat Berhenti", "Pajak Saat Berhenti Kerja atau Pulang dari Korea: Pengembalian Pajak (중도퇴사 연말정산)",
      "Cara perhitungan ulang pajak saat berhenti kerja di tengah tahun, pengembalian pajak bersama gaji terakhir, tanggungan keluarga di Indonesia, dan batas 5 tahun."),
+    ("hamil-melahirkan", "panduan", "Hamil & Melahirkan", "Cuti Melahirkan di Korea untuk Pekerja Asing: 90 Hari, Cuti Suami 20 Hari (출산휴가)",
+     "Hak pekerja E-9 saat hamil dan melahirkan di Korea: cuti 90 hari, 60 hari wajib dibayar, larangan PHK, dan cuti 20 hari untuk suami. Kalkulator tanggal cuti."),
     ("upah-minimum", "panduan", "Upah Minimum", "Upah Minimum Korea 2026 (₩10.320) dan 2027 (₩10.700): Tabel 2020–2027",
      "Upah minimum Korea 2026 adalah ₩10.320 per jam (₩2.156.880 per bulan) dan naik menjadi ₩10.700 mulai 2027. Tabel 2020–2027 dan konversi ke Rupiah."),
     ("pindah-kerja", "panduan", "Pindah Kerja", "Aturan Pindah Tempat Kerja E-9 di Korea (사업장 변경) 2026",
@@ -139,6 +141,11 @@ SOURCES = {
     "pajak-berhenti-kerja": [
         ("Korea Tax: perhitungan pajak untuk pekerja yang berhenti", "https://www.koreatax.org/tax/taxpayers/work/retiree_info_1.html"),
         ("Hometax (국세청 홈택스)", "https://www.hometax.go.kr/"),
+    ],
+    "hamil-melahirkan": [
+        ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 23, 70, 74", "https://www.law.go.kr/법령/근로기준법"),
+        ("Undang-Undang Kesetaraan Gender dalam Pekerjaan (남녀고용평등법) Pasal 18-2", "https://www.law.go.kr/법령/남녀고용평등과일ㆍ가정양립지원에관한법률"),
+        ("Work24 (고용24): permohonan tunjangan", "https://www.work24.go.kr/"),
     ],
     "upah-minimum": [
         ("Komisi Upah Minimum Korea (최저임금위원회)", "https://www.minimumwage.go.kr/"),

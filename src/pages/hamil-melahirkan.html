@@ -1,0 +1,61 @@
+<h1>Hamil dan Melahirkan Saat Bekerja di Korea: Hak Pekerja (출산전후휴가·배우자 출산휴가)</h1>
+<p class="lead">Pekerja asing, termasuk pekerja E-9, punya hak cuti melahirkan yang sama dengan pekerja Korea. Pekerja laki-laki yang istrinya melahirkan, termasuk di Indonesia, juga berhak atas cuti berbayar.</p>
+<h2>Kalkulator tanggal cuti melahirkan</h2>
+<form class="card grid" onsubmit="return false">
+  <div><label for="start">Tanggal mulai cuti</label><input id="start" type="date" value="2026-11-01"></div>
+  <div><label for="birth">Perkiraan tanggal melahirkan</label><input id="birth" type="date" value="2026-12-01"></div>
+  <div><label for="multi">Jumlah bayi</label>
+    <select id="multi"><option value="0">1 bayi</option><option value="1">Kembar</option></select></div>
+</form>
+<div class="card result">
+  <p>Cuti berakhir pada</p>
+  <p class="big" id="end">-</p>
+  <p id="msg"></p>
+  <table>
+    <tr><td>Lama cuti</td><td id="total"></td></tr>
+    <tr><td>Hari sebelum melahirkan</td><td id="before"></td></tr>
+    <tr><td>Hari setelah melahirkan</td><td id="after"></td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Untuk pekerja perempuan</h2>
+<table class="card">
+  <tr><td>Cuti melahirkan</td><td>90 hari (120 hari untuk kembar)</td></tr>
+  <tr><td>Setelah melahirkan</td><td>minimal 45 hari (60 hari untuk kembar)</td></tr>
+  <tr><td>Wajib dibayar</td><td>60 hari pertama (75 hari untuk kembar)</td></tr>
+  <tr><td>Larangan PHK</td><td>selama cuti dan 30 hari setelahnya</td></tr>
+</table>
+<ul>
+  <li><strong>Cuti 90 hari adalah hak hukum</strong>, tidak tergantung asuransi atau visa. Majikan wajib memberikannya jika diminta.</li>
+  <li><strong>Upah 60 hari pertama wajib dibayar.</strong> Jika Anda ikut asuransi ketenagakerjaan bagian yang mencakup tunjangan melahirkan, sebagian atau seluruhnya dibayar oleh asuransi lewat Work24 (dilaporkan batas atas ₩2,2 juta per bulan di 2026). Jika tidak, majikan yang membayar 60 hari itu.</li>
+  <li><strong>Selama hamil</strong>: majikan tidak boleh menyuruh lembur, dan kerja malam atau hari libur hanya dengan persetujuan Anda. Anda boleh minta pekerjaan yang lebih ringan.</li>
+  <li><strong>Pemeriksaan kehamilan</strong>: berhak waktu untuk pemeriksaan kehamilan berkala tanpa potongan gaji.</li>
+  <li><strong>Pindah kerja</strong> karena kehamilan atau melahirkan <a href="{{prefix}}pindah-kerja/">tidak dihitung</a> ke dalam batas 3 kali.</li>
+</ul>
+<h2>Untuk pekerja laki-laki: cuti saat istri melahirkan (배우자 출산휴가)</h2>
+<ul>
+  <li><strong>20 hari kerja berbayar</strong> sejak 23 Februari 2025 (sebelumnya 10 hari).</li>
+  <li>Harus dipakai dalam <strong>120 hari</strong> setelah istri melahirkan, dan boleh dibagi sampai 3 kali.</li>
+  <li>Berlaku juga jika istri melahirkan di Indonesia. Siapkan bukti kelahiran (akta kelahiran) dan bukti hubungan suami-istri, terjemahkan ke bahasa Korea, lalu ajukan ke majikan.</li>
+  <li>Cuti ini bisa digabung dengan <a href="{{prefix}}cuti-tahunan/">cuti tahunan</a> supaya waktu pulang ke Indonesia lebih panjang.</li>
+</ul>
+<h2>Pertanyaan umum</h2>
+<p><strong>Apakah visa E-9 saya hilang jika hamil?</strong><br>Tidak. Kehamilan bukan alasan pembatalan visa atau PHK. Majikan yang memecat karena hamil melanggar hukum. Hubungi Pusat Konsultasi Pekerja Asing di 1577-0071 (bahasa Indonesia) jika ditekan untuk berhenti.</p>
+<p><strong>Bagaimana cara mengecek apakah saya bisa dapat tunjangan dari asuransi?</strong><br>Tunjangan dari asuransi butuh kepesertaan asuransi ketenagakerjaan minimal 180 hari. Untuk pekerja E-9, bagian ini harus didaftarkan, sama seperti <a href="{{prefix}}tunjangan-pengangguran/">tunjangan pengangguran</a>. Tanyakan ke Pusat Ketenagakerjaan (고용센터) atau lewat Work24.</p>
+<p><strong>Apakah biaya melahirkan ditanggung?</strong><br>Ya, sebagian. Biaya pemeriksaan dan persalinan di Korea ditanggung <a href="{{prefix}}asuransi-kesehatan/">asuransi kesehatan</a>, dan ada voucher biaya kehamilan untuk peserta. Tanyakan ke NHIS di 1577-1000.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    if (!start.value || !birth.value) return;
+    var r = Calc.maternityLeave({ startDate: start.value, birthDate: birth.value, multiple: multi.value === '1' });
+    var d = new Date(r.endDate + 'T00:00:00Z');
+    end.textContent = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+    total.textContent = r.totalDays + ' hari';
+    before.textContent = Math.max(0, r.daysBeforeBirth) + ' hari';
+    after.textContent = r.daysAfterBirth + ' hari';
+    msg.innerHTML = r.tooFewAfter ? '<span class="warn">Setelah melahirkan harus ada minimal ' + r.minAfter + ' hari cuti. Cuti diperpanjang atau mulai lebih lambat.</span>' : '';
+  }
+  [start, birth, multi].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

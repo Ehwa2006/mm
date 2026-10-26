@@ -150,3 +150,15 @@ test('batas jam kerja: 52 jam, lembur maks 12, hari libur mingguan', () => {
   assert.strictEqual(s.overtime, 8);
   assert.strictEqual(C.weeklyLimit({ dailyHours: 8, daysPerWeek: 7 }).noWeeklyRest, true);
 });
+
+test('cuti melahirkan: 90 hari, minimal 45 hari setelah melahirkan', () => {
+  const r = C.maternityLeave({ startDate: '2026-11-01', birthDate: '2026-12-01' });
+  assert.strictEqual(r.endDate, '2027-01-29');
+  assert.strictEqual(r.daysBeforeBirth, 30);
+  assert.strictEqual(r.daysAfterBirth, 60);
+  assert.strictEqual(r.tooFewAfter, false);
+  const late = C.maternityLeave({ startDate: '2026-11-01', birthDate: '2027-01-01' });
+  assert.strictEqual(late.daysAfterBirth, 29);
+  assert.strictEqual(late.tooFewAfter, true);
+  assert.strictEqual(C.maternityLeave({ startDate: '2026-11-01', birthDate: '2026-12-01', multiple: true }).totalDays, 120);
+});
