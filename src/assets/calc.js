@@ -343,7 +343,25 @@
     };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, maternityLeave: maternityLeave, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
+  /* Upah normal per jam (통상시급): gaji pokok + tunjangan tetap + bonus rutin tahunan/12, dibagi jam dasar.
+     Sejak putusan Mahkamah Agung 19 Des 2024, bonus rutin dengan syarat masih bekerja tetap termasuk. */
+  function ordinaryHourly(opts) {
+    var hours = Math.max(1, +opts.monthlyHours || RATES.monthlyHours);
+    var base = Math.max(0, +opts.basePay || 0);
+    var allowances = Math.max(0, +opts.fixedAllowances || 0);
+    var bonusMonthly = Math.max(0, +opts.annualBonus || 0) / 12;
+    var otHours = Math.max(0, +opts.overtimeHours || 0);
+    var withoutBonus = (base + allowances) / hours;
+    var withBonus = (base + allowances + bonusMonthly) / hours;
+    return {
+      hourlyWithoutBonus: Math.round(withoutBonus),
+      hourlyWithBonus: Math.round(withBonus),
+      overtimeRateWithBonus: Math.round(withBonus * 1.5),
+      monthlyOvertimeDifference: Math.round((withBonus - withoutBonus) * 1.5 * otHours)
+    };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, maternityLeave: maternityLeave, ordinaryHourly: ordinaryHourly, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

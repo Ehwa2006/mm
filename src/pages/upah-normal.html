@@ -1,0 +1,55 @@
+<h1>Upah Normal (통상임금) dan Bonus: Apakah Upah Lembur Anda Sudah Benar?</h1>
+<p class="lead">Upah lembur di Korea dihitung dari "upah normal per jam" (통상시급), bukan hanya dari gaji pokok. Sejak putusan Mahkamah Agung Korea 19 Desember 2024, bonus rutin juga ikut dihitung, sehingga upah lembur bisa lebih besar dari yang Anda terima.</p>
+<form class="card grid" onsubmit="return false">
+  <div><label for="base">Gaji pokok per bulan (₩)</label><input id="base" inputmode="numeric" data-money value="2.156.880"></div>
+  <div><label for="allow">Tunjangan tetap per bulan (₩)</label><input id="allow" inputmode="numeric" data-money value="0"><div class="hint">Dibayar sama setiap bulan, misalnya tunjangan jabatan</div></div>
+  <div><label for="bonus">Bonus rutin per tahun (₩)</label><input id="bonus" inputmode="numeric" data-money value="2.508.000"><div class="hint">Bonus yang dibayar teratur, misalnya setiap Seollal dan Chuseok</div></div>
+  <div><label for="hours">Jam dasar per bulan</label><input id="hours" type="number" min="1" value="209"></div>
+  <div><label for="ot">Jam lembur per bulan</label><input id="ot" type="number" min="0" step="0.5" value="40"></div>
+</form>
+<div class="card result">
+  <p>Upah normal per jam (dengan bonus rutin)</p>
+  <p class="big" id="withB">-</p>
+  <table>
+    <tr><td>Upah per jam tanpa bonus</td><td id="withoutB"></td></tr>
+    <tr><td>Upah lembur per jam (× 1,5)</td><td id="otRate"></td></tr>
+    <tr><td>Selisih upah lembur per bulan</td><td id="diff"></td></tr>
+  </table>
+  <p class="hint">Selisih = berapa upah lembur Anda naik per bulan jika bonus rutin dihitung dengan benar.</p>
+</div>
+<div class="ad-slot"></div>
+<h2>Apa itu upah normal (통상임금)?</h2>
+<p>Upah normal adalah upah yang dibayar secara rutin dan sama untuk pekerjaan biasa. Upah normal per jam dipakai untuk menghitung upah lembur, kerja malam, kerja hari libur, uang libur mingguan, dan uang cuti tahunan.</p>
+<table class="card">
+  <tr><td><strong>Termasuk</strong></td><td>Gaji pokok, tunjangan tetap bulanan, bonus rutin (misalnya bonus Seollal/Chuseok yang dibayar setiap tahun)</td></tr>
+  <tr><td><strong>Tidak termasuk</strong></td><td>Upah lembur itu sendiri, bonus berdasarkan prestasi atau hasil kerja, bonus yang tidak pasti dibayar</td></tr>
+</table>
+<h2>Apa yang berubah sejak Desember 2024?</h2>
+<p>Dulu banyak perusahaan tidak memasukkan bonus ke upah normal dengan alasan bonus hanya dibayar kepada pekerja yang masih bekerja pada hari pembayaran (재직조건). Pada 19 Desember 2024, Mahkamah Agung Korea memutuskan bahwa bonus rutin seperti itu <strong>tetap termasuk upah normal</strong>. Akibatnya upah normal per jam naik, dan upah lembur juga naik.</p>
+<ul>
+  <li>Aturan baru ini berlaku untuk pekerjaan mulai 19 Desember 2024. Untuk masa sebelumnya umumnya tidak berlaku surut, kecuali kasus yang sudah di pengadilan saat itu.</li>
+  <li>Bonus yang tergantung prestasi kerja tetap tidak termasuk.</li>
+</ul>
+<h2>Cara mengecek slip gaji Anda</h2>
+<ol>
+  <li>Lihat apakah Anda menerima bonus rutin (상여금) setiap tahun.</li>
+  <li>Hitung upah normal per jam di kalkulator di atas.</li>
+  <li>Bandingkan dengan dasar perhitungan lembur di <a href="{{prefix}}slip-gaji/">slip gaji</a> (misalnya "연장근로 20시간 × 10.320원 × 1.5").</li>
+  <li>Jika dasar per jamnya lebih kecil dari hasil kalkulator, tanyakan ke majikan. Jika tidak diperbaiki, lihat <a href="{{prefix}}gaji-tidak-dibayar/">cara melapor</a>.</li>
+</ol>
+<h2>Pertanyaan umum</h2>
+<p><strong>Saya tidak menerima bonus sama sekali, apakah ini berpengaruh?</strong><br>Tidak. Jika upah Anda hanya gaji pokok, upah normal per jam sama dengan gaji pokok dibagi 209 jam. Pastikan saja tidak di bawah <a href="{{prefix}}upah-minimum/">upah minimum</a>.</p>
+<p><strong>Apakah pesangon juga naik?</strong><br>Pesangon dihitung dari upah rata-rata, yang sejak dulu sudah memasukkan bonus (3/12 dari bonus tahunan). Jadi putusan ini terutama memengaruhi upah lembur, malam, dan hari libur. Hitung pesangon di <a href="{{prefix}}pesangon/">kalkulator pesangon</a>.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.ordinaryHourly({ basePay: num(base), fixedAllowances: num(allow), annualBonus: num(bonus), monthlyHours: num(hours), overtimeHours: num(ot) });
+    withB.textContent = won(r.hourlyWithBonus);
+    withoutB.textContent = won(r.hourlyWithoutBonus);
+    otRate.textContent = won(r.overtimeRateWithBonus);
+    diff.textContent = '+ ' + won(r.monthlyOvertimeDifference);
+  }
+  [base, allow, bonus, hours, ot].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

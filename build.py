@@ -39,6 +39,8 @@ PAGES = [
      "Hitung perkiraan tabungan selama kerja di Korea 1 tahun, 3 tahun, atau 4 tahun 10 bulan, termasuk pesangon dan pengembalian pensiun, dalam Won dan Rupiah."),
     ("kalkulator-shift", "kalkulator", "Kerja Shift", "Kalkulator Gaji Kerja Shift Korea (2 Shift / 3 Shift): Lembur dan Jam Malam",
      "Hitung jam lembur, jam malam (22.00–06.00), dan gaji kotor per bulan untuk kerja shift siang-malam di pabrik Korea. Contoh shift 20.00–08.00."),
+    ("upah-normal", "kalkulator", "Upah Normal & Bonus", "Kalkulator Upah Normal Korea (통상임금): Bonus Rutin dan Upah Lembur Sejak Putusan 2024",
+     "Sejak putusan Mahkamah Agung Korea Desember 2024, bonus rutin termasuk upah normal sehingga upah lembur naik. Hitung upah normal per jam dan selisih lembur Anda."),
     ("uang-libur-mingguan", "kalkulator", "Uang Libur Mingguan", "Kalkulator Uang Libur Mingguan Korea (주휴수당) 2026",
      "Hitung uang libur mingguan (주휴수당) di Korea: syarat 15 jam per minggu, rumus, dan contoh dengan upah minimum 2026."),
     ("cuti-tahunan", "kalkulator", "Cuti Tahunan", "Kalkulator Cuti Tahunan Korea (연차) dan Uang Pengganti Cuti",
@@ -112,6 +114,11 @@ SOURCES = {
     ],
     "kalkulator-shift": [
         ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 50, 53, 56", "https://www.law.go.kr/법령/근로기준법"),
+    ],
+    "upah-normal": [
+        ("Shin & Kim: putusan Mahkamah Agung tentang upah normal (Des 2024)", "https://www.shinkim.com/kor/media/newsletter/2648"),
+        ("Bae, Kim & Lee: legal update 20 Desember 2024", "https://www.bkl.co.kr/newsLetter/itemUrl.do?itemNo=5872"),
+        ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 56", "https://www.law.go.kr/법령/근로기준법"),
     ],
     "uang-libur-mingguan": [
         ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 55", "https://www.law.go.kr/법령/근로기준법"),

@@ -162,3 +162,11 @@ test('cuti melahirkan: 90 hari, minimal 45 hari setelah melahirkan', () => {
   assert.strictEqual(late.tooFewAfter, true);
   assert.strictEqual(C.maternityLeave({ startDate: '2026-11-01', birthDate: '2026-12-01', multiple: true }).totalDays, 120);
 });
+
+test('upah normal per jam: bonus rutin menaikkan dasar lembur', () => {
+  const r = C.ordinaryHourly({ basePay: 2156880, fixedAllowances: 0, annualBonus: 2508000, overtimeHours: 40 });
+  assert.strictEqual(r.hourlyWithoutBonus, 10320);
+  assert.strictEqual(r.hourlyWithBonus, Math.round((2156880 + 209000) / 209)); // 11.320
+  assert.strictEqual(r.overtimeRateWithBonus, Math.round(11320 * 1.5));
+  assert.strictEqual(r.monthlyOvertimeDifference, Math.round(1000 * 1.5 * 40));
+});
