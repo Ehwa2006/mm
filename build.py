@@ -57,6 +57,8 @@ PAGES = [
      "Jam kerja di Korea maksimal 40 jam + 12 jam lembur per minggu untuk tempat kerja 5 pekerja atau lebih, berlaku penuh sejak 2025. Cek jam kerja Anda."),
     ("pajak-berhenti-kerja", "panduan", "Pajak Saat Berhenti", "Pajak Saat Berhenti Kerja atau Pulang dari Korea: Pengembalian Pajak (중도퇴사 연말정산)",
      "Cara perhitungan ulang pajak saat berhenti kerja di tengah tahun, pengembalian pajak bersama gaji terakhir, tanggungan keluarga di Indonesia, dan batas 5 tahun."),
+    ("sakit", "panduan", "Sakit & Cuti Sakit", "Sakit Saat Bekerja di Korea: Cuti Sakit dan Tunjangan Sakit (상병수당) untuk Pekerja Asing",
+     "Apa yang bisa dilakukan pekerja asing di Korea saat sakit bukan karena kerja: cuti tahunan, aturan perusahaan, dan tunjangan sakit percontohan ₩49.540 per hari."),
     ("hamil-melahirkan", "panduan", "Hamil & Melahirkan", "Cuti Melahirkan di Korea untuk Pekerja Asing: 90 Hari, Cuti Suami 20 Hari (출산휴가)",
      "Hak pekerja E-9 saat hamil dan melahirkan di Korea: cuti 90 hari, 60 hari wajib dibayar, larangan PHK, dan cuti 20 hari untuk suami. Kalkulator tanggal cuti."),
     ("upah-minimum", "panduan", "Upah Minimum", "Upah Minimum Korea 2026 (₩10.320) dan 2027 (₩10.700): Tabel 2020–2027",
@@ -148,6 +150,10 @@ SOURCES = {
     "pajak-berhenti-kerja": [
         ("Korea Tax: perhitungan pajak untuk pekerja yang berhenti", "https://www.koreatax.org/tax/taxpayers/work/retiree_info_1.html"),
         ("Hometax (국세청 홈택스)", "https://www.hometax.go.kr/"),
+    ],
+    "sakit": [
+        ("Kementerian Kesehatan: program percontohan tunjangan sakit", "https://www.mohw.go.kr/menu.es?mid=a10705020300"),
+        ("Kementerian Kesehatan: 4 wilayah percontohan ditambahkan", "https://www.mohw.go.kr/board.es?mid=a10503000000&bid=0027&list_no=1482132&act=view"),
     ],
     "hamil-melahirkan": [
         ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 23, 70, 74", "https://www.law.go.kr/법령/근로기준법"),

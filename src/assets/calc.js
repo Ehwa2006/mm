@@ -10,7 +10,9 @@
     health: 0.03595,             // 건강보험 bagian pekerja
     longTermCare: 0.9448 / 7.19, // 장기요양 = iuran kesehatan × 13,14%
     employment: 0.009,           // 고용보험 bagian pekerja (bagian tunjangan pengangguran)
-    jobSeekMax: 68100            // batas atas tunjangan pengangguran per hari (2026)
+    jobSeekMax: 68100,           // batas atas tunjangan pengangguran per hari (2026)
+    sicknessFlat: 49540,         // tunjangan sakit percontohan (상병수당) per hari, 60% upah minimum 8 jam (2026)
+    sicknessMax: 68100           // batas atas tunjangan sakit model 60% upah rata-rata (2026)
   };
 
   function floor10(n) { return Math.floor(n / 10) * 10; }
@@ -361,7 +363,20 @@
     };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, maternityLeave: maternityLeave, ordinaryHourly: ordinaryHourly, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
+  /* Tunjangan sakit percontohan (상병수당): masa tunggu 7 hari, maksimal 150 hari.
+     'flat' = jumlah tetap per hari; 'wage' = 60% upah rata-rata harian dengan batas bawah/atas. */
+  function sicknessBenefit(opts) {
+    var daysOff = Math.max(0, Math.floor(+opts.daysOff || 0));
+    var waiting = opts.waitingDays == null ? 7 : Math.max(0, +opts.waitingDays);
+    var paidDays = Math.min(150, Math.max(0, daysOff - waiting));
+    var daily = RATES.sicknessFlat;
+    if (opts.scheme === 'wage') {
+      daily = Math.round(Math.min(RATES.sicknessMax, Math.max(RATES.sicknessFlat, (+opts.avgDailyWage || 0) * 0.6)));
+    }
+    return { paidDays: paidDays, daily: daily, total: paidDays * daily };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, sicknessBenefit: sicknessBenefit, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, maternityLeave: maternityLeave, ordinaryHourly: ordinaryHourly, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

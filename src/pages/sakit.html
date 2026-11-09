@@ -1,0 +1,59 @@
+<h1>Sakit Bukan Karena Kerja di Korea: Cuti Sakit dan Tunjangan Sakit (병가·상병수당)</h1>
+<p class="lead">Korea belum punya cuti sakit berbayar yang wajib untuk semua pekerja swasta. Tetapi ada beberapa cara supaya Anda tetap terlindungi saat sakit, termasuk tunjangan sakit percontohan di beberapa kota.</p>
+<div class="card">
+  <h2>Ringkasan</h2>
+  <table>
+    <tr><td>Sakit karena pekerjaan</td><td>Asuransi kecelakaan kerja (산재), 70% upah</td></tr>
+    <tr><td>Sakit biasa</td><td>Cuti tahunan, cuti sakit menurut aturan perusahaan, atau cuti tanpa gaji</td></tr>
+    <tr><td>Biaya berobat</td><td>Ditanggung sebagian oleh asuransi kesehatan</td></tr>
+    <tr><td>Tunjangan sakit (상병수당)</td><td>Hanya di kota percontohan, mulai hari ke-8</td></tr>
+  </table>
+</div>
+<div class="ad-slot"></div>
+<h2>Langkah saat sakit</h2>
+<ol>
+  <li><strong>Apakah sakitnya karena pekerjaan?</strong> Cedera atau penyakit akibat kerja (misalnya sakit punggung karena mengangkat barang berat, atau terkena bahan kimia) ditanggung <a href="{{prefix}}kecelakaan-kerja/">asuransi kecelakaan kerja</a>, yang jauh lebih menguntungkan. Jangan anggap sebagai sakit biasa.</li>
+  <li><strong>Beri tahu majikan secepatnya</strong> dan simpan surat keterangan dokter (진단서 atau 소견서).</li>
+  <li><strong>Cek aturan perusahaan</strong> (취업규칙 atau kontrak). Sebagian perusahaan memberi cuti sakit berbayar atau tanpa gaji.</li>
+  <li><strong>Pakai cuti tahunan</strong> jika masih ada. Lihat <a href="{{prefix}}cuti-tahunan/">kalkulator cuti tahunan</a>.</li>
+  <li><strong>Cek tunjangan sakit percontohan</strong> jika Anda tinggal atau bekerja di kota percontohan (lihat di bawah).</li>
+</ol>
+<h2>Tunjangan sakit percontohan (상병수당 시범사업)</h2>
+<p>Pemerintah Korea sedang menguji tunjangan sakit di beberapa kota. Kota yang sedang berjalan di 2026 antara lain Anyang, Yongin, Dalseo-gu (Daegu), Iksan, Chungju, Hongseong, Jeonju, dan Wonju. Daftar kota bisa bertambah, jadi cek ke NHIS di 1577-1000.</p>
+<ul>
+  <li>Untuk pekerja usia 15–64 tahun yang tinggal atau bekerja di kota percontohan, dan tidak bisa bekerja karena sakit atau cedera yang bukan akibat kerja.</li>
+  <li>Masa tunggu 7 hari tidak dibayar. Maksimal dibayar 150 hari.</li>
+  <li>Jumlah per hari 2026: ₩49.540 (jumlah tetap), atau di sebagian kota 60% upah rata-rata harian dengan batas ₩49.540–₩68.100.</li>
+  <li>Syarat untuk pekerja asing tergantung status kepesertaan asuransi. Tanyakan langsung ke NHIS sebelum mengajukan.</li>
+</ul>
+<h2>Kalkulator perkiraan tunjangan sakit</h2>
+<form class="card grid" onsubmit="return false">
+  <div><label for="days">Hari tidak bisa bekerja</label><input id="days" type="number" min="0" value="20"></div>
+  <div><label for="scheme">Jenis perhitungan di kota Anda</label>
+    <select id="scheme"><option value="flat">Jumlah tetap (₩49.540/hari)</option><option value="wage">60% upah rata-rata harian</option></select></div>
+  <div><label for="avg">Upah rata-rata harian (₩)</label><input id="avg" inputmode="numeric" data-money value="100.000"><div class="hint">Gaji 3 bulan terakhir ÷ jumlah hari</div></div>
+</form>
+<div class="card result">
+  <p>Perkiraan tunjangan sakit</p>
+  <p class="big" id="total">-</p>
+  <table>
+    <tr><td>Hari yang dibayar</td><td id="paid"></td></tr>
+    <tr><td>Per hari</td><td id="daily"></td></tr>
+  </table>
+</div>
+<h2>Pertanyaan umum</h2>
+<p><strong>Bolehkah majikan memecat saya karena sakit?</strong><br>Majikan butuh alasan yang sah untuk memecat. Sakit sebentar dengan surat dokter bukan alasan yang cukup. Jika sakit karena pekerjaan, Anda tidak boleh dipecat selama pengobatan dan 30 hari setelahnya. Konsultasi ke 1577-0071 (bahasa Indonesia) jika ditekan untuk berhenti.</p>
+<p><strong>Sakit lama dan tidak bisa melanjutkan pekerjaan ini, apa pilihannya?</strong><br>Jika Anda masih bisa bekerja di tempat lain, sakit atau cedera adalah alasan yang sah untuk <a href="{{prefix}}pindah-kerja/">pindah tempat kerja</a>. Siapkan surat dokter.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.sicknessBenefit({ daysOff: num(days), scheme: scheme.value, avgDailyWage: num(avg) });
+    total.textContent = won(r.total);
+    paid.textContent = r.paidDays + ' hari';
+    daily.textContent = won(r.daily);
+    avg.disabled = scheme.value !== 'wage';
+  }
+  [days, scheme, avg].forEach(function (el) { el.addEventListener('input', run); });
+  run();
+});
+</script>

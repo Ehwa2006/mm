@@ -170,3 +170,12 @@ test('upah normal per jam: bonus rutin menaikkan dasar lembur', () => {
   assert.strictEqual(r.overtimeRateWithBonus, Math.round(11320 * 1.5));
   assert.strictEqual(r.monthlyOvertimeDifference, Math.round(1000 * 1.5 * 40));
 });
+
+test('tunjangan sakit: masa tunggu 7 hari, maks 150 hari, batas bawah/atas', () => {
+  assert.deepStrictEqual(C.sicknessBenefit({ daysOff: 20 }), { paidDays: 13, daily: 49540, total: 13 * 49540 });
+  assert.strictEqual(C.sicknessBenefit({ daysOff: 5 }).total, 0);
+  assert.strictEqual(C.sicknessBenefit({ daysOff: 400 }).paidDays, 150);
+  assert.strictEqual(C.sicknessBenefit({ daysOff: 20, scheme: 'wage', avgDailyWage: 100000 }).daily, 60000);
+  assert.strictEqual(C.sicknessBenefit({ daysOff: 20, scheme: 'wage', avgDailyWage: 200000 }).daily, 68100);
+  assert.strictEqual(C.sicknessBenefit({ daysOff: 20, scheme: 'wage', avgDailyWage: 50000 }).daily, 49540);
+});
