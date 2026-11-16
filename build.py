@@ -81,6 +81,8 @@ PAGES = [
      "Batas waktu registrasi orang asing di Korea (90 hari), lapor pindah alamat (15 hari), dan ganti kartu ARC hilang (14 hari, ₩35.000)."),
     ("perpanjangan-kerja", "panduan", "Perpanjangan Kerja", "Perpanjangan Masa Kerja E-9 di Korea: 3 Tahun Menjadi 4 Tahun 10 Bulan (재고용)",
      "Cara memperpanjang masa kerja pekerja E-9 sampai 1 tahun 10 bulan: pengajuan majikan 60–7 hari sebelum habis dan perpanjangan izin tinggal."),
+    ("rekening-bank", "panduan", "Rekening Bank", "Cara Buka Rekening Bank di Korea untuk Pekerja Asing: Dokumen dan Batas Transfer",
+     "Dokumen untuk membuka rekening bank di Korea (ARC, paspor, bukti kerja), batas transaksi rekening baru (한도제한계좌), cara menaikkannya, dan bahaya meminjamkan rekening."),
     ("aplikasi-penting", "panduan", "Aplikasi Penting", "Aplikasi Penting untuk Pekerja Indonesia di Korea: Chat, Penerjemah, Peta, Taksi",
      "Aplikasi yang wajib dipunya pekerja asing di Korea: KakaoTalk, Papago, Naver Map, Kakao T, HiKorea, dan tips menghindari penipuan."),
     ("nomor-penting", "panduan", "Nomor Penting", "Nomor Telepon Penting untuk Pekerja Indonesia di Korea (Bahasa Indonesia)",
@@ -110,6 +112,7 @@ SOURCES = {
     "pengembalian-pensiun": [
         ("National Pension Service: panduan untuk orang asing (PDF)", "https://www.nps.or.kr/html/download/guide_for_foreigners_3.pdf"),
         ("National Pension Service: pengembalian sekaligus (반환일시금)", "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0079M0.do"),
+        ("National Pension Service: Informasi Pensiun Nasional untuk Orang Asing (bahasa Indonesia, PDF)", "https://www.nps.or.kr/html/download/nps_2018guide_indonesia.pdf"),
     ],
     "kalkulator-tabungan": [
         ("National Pension Service: panduan untuk orang asing (PDF)", "https://www.nps.or.kr/html/download/guide_for_foreigners_3.pdf"),
