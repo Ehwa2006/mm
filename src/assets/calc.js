@@ -376,7 +376,27 @@
     return { paidDays: paidDays, daily: daily, total: paidDays * daily };
   }
 
-  var api = { RATES: RATES, unemployment: unemployment, sicknessBenefit: sicknessBenefit, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, maternityLeave: maternityLeave, ordinaryHourly: ordinaryHourly, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
+  /* Pajak tahunan (pajak penghasilan + pajak daerah 10%) untuk gaji bulanan tetap dan jumlah tanggungan. */
+  function annualIncomeTax(monthlyGross, dependents) {
+    var d = deductions(monthlyGross);
+    var annual = Math.max(0, monthlyGross) * 12;
+    var insurance = (d.pension + d.health + d.longTermCare + d.employment) * 12;
+    var taxBase = annual - earnedIncomeDeduction(annual) - 1500000 * Math.max(1, dependents) - insurance;
+    var computed = progressiveTax(Math.max(0, taxBase));
+    var tax = Math.max(0, computed - earnedIncomeTaxCredit(computed, annual) - 130000);
+    return Math.floor(tax * 1.1);
+  }
+
+  /* Penyesuaian pajak akhir tahun (연말정산): penghematan dari menambah tanggungan keluarga. */
+  function yearEndDependents(opts) {
+    var m = Math.max(0, +opts.monthlyGross || 0);
+    var extra = Math.max(0, Math.floor(+opts.extraDependents || 0));
+    var before = annualIncomeTax(m, 1);
+    var after = annualIncomeTax(m, 1 + extra);
+    return { taxBefore: before, taxAfter: after, saving: before - after };
+  }
+
+  var api = { RATES: RATES, unemployment: unemployment, sicknessBenefit: sicknessBenefit, yearEndDependents: yearEndDependents, publicHolidayPay: publicHolidayPay, shiftPay: shiftPay, weeklyLimit: weeklyLimit, maternityLeave: maternityLeave, ordinaryHourly: ordinaryHourly, dormDeductionLimit: dormDeductionLimit, savings: savings, deductions: deductions, monthlyPay: monthlyPay,
     severance: severance, pensionRefund: pensionRefund,
     weeklyHolidayPay: weeklyHolidayPay, annualLeave: annualLeave };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

@@ -55,6 +55,8 @@ PAGES = [
      "Arti setiap baris di slip gaji Korea: gaji pokok, lembur, uang libur, potongan asuransi dan pajak. Daftar hal yang harus dicek setiap bulan."),
     ("batas-jam-kerja", "panduan", "Batas Jam Kerja", "Batas Jam Kerja Korea 52 Jam per Minggu (주 52시간): Aturan dan Cek Jam Anda",
      "Jam kerja di Korea maksimal 40 jam + 12 jam lembur per minggu untuk tempat kerja 5 pekerja atau lebih, berlaku penuh sejak 2025. Cek jam kerja Anda."),
+    ("pajak-akhir-tahun", "kalkulator", "Pajak Akhir Tahun", "Penyesuaian Pajak Akhir Tahun Korea (연말정산) untuk Pekerja Indonesia: Hemat dengan Tanggungan Keluarga",
+     "Jadwal 연말정산, dokumen tanggungan keluarga di Indonesia (Kartu Keluarga), dan kalkulator berapa pajak yang dihemat jika menambah tanggungan."),
     ("pajak-berhenti-kerja", "panduan", "Pajak Saat Berhenti", "Pajak Saat Berhenti Kerja atau Pulang dari Korea: Pengembalian Pajak (중도퇴사 연말정산)",
      "Cara perhitungan ulang pajak saat berhenti kerja di tengah tahun, pengembalian pajak bersama gaji terakhir, tanggungan keluarga di Indonesia, dan batas 5 tahun."),
     ("sakit", "panduan", "Sakit & Cuti Sakit", "Sakit Saat Bekerja di Korea: Cuti Sakit dan Tunjangan Sakit (상병수당) untuk Pekerja Asing",
@@ -149,6 +151,10 @@ SOURCES = {
     "batas-jam-kerja": [
         ("Kementerian Ketenagakerjaan: berakhirnya masa transisi untuk tempat kerja di bawah 30 pekerja", "https://www.moel.go.kr/policy/policydata/view.do?bbs_seq=20241201955"),
         ("Undang-Undang Standar Ketenagakerjaan (근로기준법) Pasal 50, 53, 54", "https://www.law.go.kr/법령/근로기준법"),
+    ],
+    "pajak-akhir-tahun": [
+        ("Hometax (국세청 홈택스)", "https://www.hometax.go.kr/"),
+        ("세정일보: FAQ penyesuaian pajak untuk pekerja asing", "https://www.sejungilbo.com/news/articleView.html?idxno=51407"),
     ],
     "pajak-berhenti-kerja": [
         ("Korea Tax: perhitungan pajak untuk pekerja yang berhenti", "https://www.koreatax.org/tax/taxpayers/work/retiree_info_1.html"),

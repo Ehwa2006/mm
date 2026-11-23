@@ -179,3 +179,17 @@ test('tunjangan sakit: masa tunggu 7 hari, maks 150 hari, batas bawah/atas', () 
   assert.strictEqual(C.sicknessBenefit({ daysOff: 20, scheme: 'wage', avgDailyWage: 200000 }).daily, 68100);
   assert.strictEqual(C.sicknessBenefit({ daysOff: 20, scheme: 'wage', avgDailyWage: 50000 }).daily, 49540);
 });
+
+test('akhir tahun: tanggungan menurunkan pajak, tidak pernah negatif', () => {
+  const r = C.yearEndDependents({ monthlyGross: 3500000, extraDependents: 2 });
+  assert.ok(r.saving > 0);
+  assert.strictEqual(r.taxBefore - r.taxAfter, r.saving);
+  assert.ok(r.taxAfter >= 0);
+  // pajak sebelum = pajak bulanan dari kalkulator gaji × 12 (selisih pembulatan kecil)
+  const d = C.deductions(3500000);
+  assert.ok(Math.abs(r.taxBefore - (d.incomeTax + d.localTax) * 12) < 200);
+  // gaji rendah: penghematan tidak bisa lebih besar dari pajak yang dibayar
+  const low = C.yearEndDependents({ monthlyGross: 1500000, extraDependents: 3 });
+  assert.strictEqual(low.taxAfter, 0);
+  assert.strictEqual(low.saving, low.taxBefore);
+});

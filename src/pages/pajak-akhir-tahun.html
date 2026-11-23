@@ -1,0 +1,51 @@
+<h1>Penyesuaian Pajak Akhir Tahun di Korea (연말정산): Panduan untuk Pekerja Indonesia</h1>
+<p class="lead">Setiap Januari–Februari, pajak penghasilan tahun sebelumnya dihitung ulang. Jika Anda memasukkan keluarga di Indonesia sebagai tanggungan, pajak bisa turun dan kelebihannya dikembalikan bersama gaji Februari atau Maret.</p>
+<h2>Kalkulator: berapa hemat pajak dari tanggungan keluarga?</h2>
+<form class="card grid" onsubmit="return false">
+  <div><label for="gross">Rata-rata gaji kotor per bulan (₩)</label><input id="gross" inputmode="numeric" data-money value="2.800.000"><div class="hint">Termasuk lembur</div></div>
+  <div><label for="deps">Jumlah tanggungan yang ditambahkan</label><input id="deps" type="number" min="0" max="10" value="2"><div class="hint">Misalnya istri dan 1 anak, atau ayah dan ibu</div></div>
+</form>
+<div class="card result">
+  <p>Perkiraan pajak yang dihemat per tahun</p>
+  <p class="big" id="saving">-</p>
+  <table>
+    <tr><td>Pajak setahun tanpa tanggungan</td><td id="before"></td></tr>
+    <tr><td>Pajak setahun dengan tanggungan</td><td id="after"></td></tr>
+  </table>
+  <p class="hint">Termasuk pajak daerah 10%. Perkiraan dengan gaji yang sama setiap bulan.</p>
+</div>
+<div class="ad-slot"></div>
+<h2>Jadwal biasanya</h2>
+<table class="card">
+  <tr><td>Pertengahan Januari</td><td>Data potongan (biaya berobat, kartu, dll.) tersedia di Hometax</td></tr>
+  <tr><td>Januari–Februari</td><td>Serahkan dokumen ke bagian gaji perusahaan</td></tr>
+  <tr><td>Februari–Maret</td><td>Hasil masuk ke slip gaji: pengembalian (환급) atau tambahan bayar (추가 납부)</td></tr>
+</table>
+<h2>Potongan yang paling berguna untuk pekerja EPS</h2>
+<ul>
+  <li><strong>Tanggungan keluarga di Indonesia (부양가족 공제)</strong>: pasangan, anak, atau orang tua dengan penghasilan kecil. Setiap orang mengurangi penghasilan kena pajak ₩1.500.000. Untuk orang tua ada syarat usia (biasanya 60 tahun ke atas), untuk anak biasanya 20 tahun ke bawah.</li>
+  <li><strong>Biaya berobat</strong> di Korea yang Anda bayar sendiri, jika jumlahnya besar.</li>
+  <li><strong>Penggunaan kartu debit/kredit</strong> di Korea, jika melebihi 25% dari gaji setahun.</li>
+</ul>
+<h2>Dokumen untuk tanggungan di Indonesia</h2>
+<ul>
+  <li>Bukti hubungan keluarga, misalnya <strong>Kartu Keluarga</strong> atau akta kelahiran/akta nikah.</li>
+  <li><strong>Terjemahan bahasa Korea</strong>. Tanyakan ke perusahaan apakah perlu legalisasi atau apostille.</li>
+  <li>Siapkan sejak Desember, karena mengurus dokumen dari Indonesia butuh waktu.</li>
+</ul>
+<h2>Pertanyaan umum</h2>
+<p><strong>Kenapa gaji Februari saya lebih kecil?</strong><br>Jika potongan pajak bulanan selama setahun lebih kecil dari pajak yang seharusnya, selisihnya dipotong saat penyesuaian akhir tahun. Ini sering terjadi jika lembur banyak. Cek baris 연말정산 di <a href="{{prefix}}slip-gaji/">slip gaji</a>.</p>
+<p><strong>Bolehkah orang tua dimasukkan sebagai tanggungan oleh dua saudara sekaligus?</strong><br>Tidak. Satu orang hanya boleh menjadi tanggungan satu pekerja. Jika ketahuan dobel, pajak bisa ditagih kembali dengan denda.</p>
+<p><strong>Saya berhenti kerja di tengah tahun, bagaimana?</strong><br>Penyesuaian dilakukan saat gaji terakhir. Lihat <a href="{{prefix}}pajak-berhenti-kerja/">pajak saat berhenti kerja</a>.</p>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function run() {
+    var r = Calc.yearEndDependents({ monthlyGross: num(gross), extraDependents: num(deps) });
+    saving.textContent = won(r.saving);
+    before.textContent = won(r.taxBefore);
+    after.textContent = won(r.taxAfter);
+  }
+  gross.addEventListener('input', run); deps.addEventListener('input', run);
+  run();
+});
+</script>
